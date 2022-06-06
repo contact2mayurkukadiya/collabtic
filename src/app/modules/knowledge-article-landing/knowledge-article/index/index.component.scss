@@ -1,0 +1,54 @@
+.knowledge_article__heading {
+  width: 178px;
+  height: 22px;
+  font-family: "Roboto-Regular";
+  font-size: 20px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.36;
+  letter-spacing: normal;
+  bottom: 3px;
+  position: relative;
+  text-align: left;
+  color: var(--ID60);
+}
+.center-middle-width-container {
+  padding-top: 0.7rem;
+}
+.right-middle-width-container {
+  padding-top: 10px !important;
+}
+.right-collapse {
+  position: absolute;
+  right: 0;
+  width: 16px;
+}
+.landing-page .thread-page-container {
+  margin: 0 auto;
+  margin-top: 6px !important;
+  padding: 10px 0px 10px 4px !important;
+  border-radius: 8px;
+}
+.text-thread-title {
+  width: 260px;
+}
+.thread-add-new {
+  margin-left: 0px !important;
+}
+
+.thread-top-left {
+  width: 100% !important;
+  position: relative;
+  bottom: 2px;
+  padding-left: 1rem;
+  padding-bottom: 6px;
+}
+.thread-top-right {
+  /*width: auto !important;*/
+  width: 10%;
+}
+.thread-img {
+  position: relative;
+  top: 2px;
+}

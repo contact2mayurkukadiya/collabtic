@@ -1,0 +1,35 @@
+<div class="custom-modal modal-container" id="wrapper">
+    <div class="modal-header">
+        <h6 class="modal-title text-center">Confirmation</h6>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+            <div class="container" [ngClass]="{'text-center': access == 'Workstream Save'}">
+                <div class="conf-txt text-center" [ngClass]="{'notify-txt': access == 'Workstream Save'}" [innerHTML]="bodyTxt"></div>
+                <div *ngIf="access == 'Workstream Save'" class="notify">
+                    <img *ngIf="notifyFlag" class="cursor" (click)="notifyUserChange(0)" src="assets/images/site/workstream-creation/toggle-active-icon.png" alt="Notify Users" />
+                    <img *ngIf="!notifyFlag" class="cursor" (click)="notifyUserChange(1)" src="assets/images/site/workstream-creation/toggle-icon.png" alt="Notify Users" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div *ngIf="access == 'Workstream Save'" class="confirm-actions">
+            <button class="btn action-btn cancel" (click)="confNotifyAction(false)">Cancel<span class="cancel-btn"></span></button>
+            <button class="btn action-btn submit" (click)="confNotifyAction(true)">Ok<span class="submit-btn"></span></button>
+        </div>
+        <div *ngIf="access == 'ThreadClose'" class="confirm-actions">
+            <button class="btn action-btn cancel" (click)="confAction(false)">Cancel<span class="cancel-btn"></span></button>
+            <button class="btn action-btn submit" (click)="confAction(true)">Yes<span class="submit-btn yes-btn-close"></span></button>
+        </div>
+        <div *ngIf="access == 'ThreadDelete' || access == 'PostDelete'" class="confirm-actions">
+            <button class="btn action-btn cancel" (click)="confAction(false)">Cancel<span class="cancel-btn"></span></button>
+            <button class="btn action-btn submit" (click)="confAction(true)">Yes<span class="submit-btn yes-btn-delete"></span></button>
+        </div>
+        <div *ngIf="(access != 'Workstream Save') && (access != 'ThreadClose') && (access != 'ThreadDelete') && (access != 'PostDelete')" class="confirm-actions">
+            <button *ngIf="access != 'escalationAction'" class="btn action-btn cancel" (click)="confAction(false)">Cancel<span class="cancel-btn"></span></button>
+            <button class="btn action-btn submit" (click)="confAction(true)">Ok<span class="submit-btn"></span></button>
+        </div>
+        
+    </div>
+</div>

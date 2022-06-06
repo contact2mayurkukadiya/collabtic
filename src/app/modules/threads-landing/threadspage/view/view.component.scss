@@ -1,0 +1,46 @@
+.post-desp-div{
+    margin:-1px;
+}
+.mt-3{
+    margin-top: 0.7rem !important;
+}
+.selected-users{
+    &.selected-users-bg{
+        background:none;
+    }
+}
+.new-post-img{
+    display: inline-block;
+    width: 16px;
+    height: 15px;    
+}
+.new-close-img{
+    display: inline-block;
+    width: 18px;
+    height: 18px;  
+}
+.video-banner{
+    margin: 0px 20px 30px 20px
+}
+.profile-topbadge-user-pview1{
+    display: inline-block;
+    top: -3px;
+    vertical-align: top;
+    position: relative;        
+  }
+  .profile-topbadge-user-pview2{
+    display: inline-block;
+    top: -4px;
+    vertical-align: top;
+    position: relative;
+    padding-right: 4px;    
+  }
+
+  /** Perfect Scrollbar */
+  ::ng-deep body .ps {
+    &.ps--active-y { 
+      .ps__rail-y {       
+        z-index: 100;        
+      }
+    }
+  }

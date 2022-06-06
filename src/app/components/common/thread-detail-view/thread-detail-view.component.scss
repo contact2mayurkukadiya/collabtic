@@ -1,0 +1,72 @@
+.support-team-cont{
+   
+    .support-team-cont-tb{        
+        display: inline-block;
+        margin:10px 36px 0 10px;
+    }
+        .th-head-img {
+            display: inline-block;
+            width: 38px;
+            height: 38px;
+            position: relative;
+            top: 2px;
+            margin: 0 10px 0 0;
+            span {
+              &.rounded-circle {
+                display: block;
+                background-image: url("https://s3-us-west-2.amazonaws.com/cbt-demo-file-output/userprofile/thumb_profile_image.png");
+                background-position: top;
+                background-repeat: no-repeat;
+                background-size: cover;
+                width: auto;
+                height: 100%;
+                background-color: #ffffff;
+                border: 1px solid #e7ebeb;
+              }
+              &.availability-status {
+                top: -13px;
+                left: 29px;
+                height: 10px;
+                width: 10px;
+                border: none;
+              }
+            }
+          }
+          .th-head-text1 {
+            font-family: Roboto-Medium;
+            color: #2b2b2b;
+            font-size: 14px;
+            display: block;
+          }
+          .th-head-text2 {
+            font-family: Roboto-Regular;
+            color: #2b2b2b;
+            font-size: 13px;
+            display: block;            
+          }
+          .th-head-text3 {
+            font-family: Roboto-Medium;
+            color: #93989d;
+            font-size: 14px;
+            display: block;
+          }
+          .th-phone-img{
+            display: inline-block;
+            width: 38px;
+            height: 38px;
+            margin: 0 12px 0 0;            
+            img{
+              position: relative;
+              top: 0;                        
+            }         
+          }
+        
+    
+}
+.profile-topbadge-user-tview{
+  display: inline-block;
+  top: -3px;
+  vertical-align: top;
+  position: relative;
+  margin-right: 4px;
+}

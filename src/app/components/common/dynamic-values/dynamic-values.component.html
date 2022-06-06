@@ -1,0 +1,56 @@
+<div class="prob-form-info base-info" [ngClass]="{'hide': d.items.length == 0}" *ngFor="let d of dynamicValues; let i=index;">
+    <div *ngFor="let f of d.items">
+        <div class="base-info-row {{f.fieldName}}">
+            <div *ngIf="(((industryType.id < 2 || industryType.id > 2) && (f.fieldName == 'make' || (platform == 2 && f.fieldName == 'SelectProductType'))) || (industryType.id == 2 && f.fieldName == 'vinNo') || (platform == 2 && f.fieldName == 'bannerImage'))" class="banner-img">
+                <div *ngIf="banner == ''" class="banner-loader"><img src="assets/images/loading.svg" alt="Loader" /></div>
+                <span class="{{industryType.class}}" [ngClass]="{'default': defaultBanner, 'opt-banner': f.fieldName == 'bannerImage' && !defaultBanner}" [ngStyle]="{'background-image': 'url(' + banner + ')'}"></span>
+            </div>
+            <div *ngIf="f.fieldName != 'bannerImage'" class="base-info-col icon-col {{f.fieldName}}-icon {{industryType.class}}" [ngClass]="{'share': (f.fieldName == 'threadType' && f.formValue == 'share')}"></div>
+            <div *ngIf="f.fieldName != 'bannerImage'" class="base-info-col cust-comp-cont">
+                <span class="label" *ngIf="f.placeholder != 'Enter VIN'">{{f.placeholder}}</span>
+                <span class="label" *ngIf="f.placeholder == 'Enter VIN'">VIN</span>
+                <span class="value title {{f.fieldName}}" *ngIf="!f.isArray">
+                    <span [innerHtml]="f.selectedVal"></span>
+                    <div *ngIf="f.selectedVal == ''" [innerHtml]="emptyCont"></div>
+                </span>
+                <span class="value title" *ngIf="f.isArray">
+                    <div class="dynmic-selected-items" *ngIf="f.selectedVal.length > 0 && f.selectedVal != ''">
+                        <div class="selected-items">
+                            <div *ngFor="let item of f.selectedVal; let t=index" class="tag-text tag-view-txt {{f.fieldName}}-tag-text">
+                                <span>{{item}}</span>
+                            </div>                            
+                        </div>
+                    </div>
+                    <div *ngIf="f.selectedVal.length == 0" [innerHtml]="emptyCont"></div>
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <p-accordion class="dynamic-val" *ngIf="d.optFields.length > 0" (onOpen)="onToggle(d)" (onClose)="onToggle(d)">
+        <p-accordionTab header="{{d.toggleTxt}} {{optionTxt}}">
+            <div *ngFor="let f of d.optFields">
+                <div class="base-info-row {{f.fieldName}}">
+                    <div class="base-info-col icon-col {{f.fieldName}}-icon {{industryType.class}}" [ngClass]="{'hide': f.fieldName == 'miles'}"></div>
+                    <div class="base-info-col cust-comp-cont">
+                        <span class="label" [ngClass]="{'hide': f.fieldName == 'miles'}">{{f.placeholder}}</span>
+                        <span class="value title {{f.fieldName}}" *ngIf="!f.isArray || (f.fieldName != 'miles' && f.isArray)">
+                            <span [innerHtml]="f.selectedVal"></span>
+                            <div *ngIf="f.selectedVal == ''" [innerHtml]="emptyCont"></div>
+                        </span>
+                        <span class="value title" *ngIf="f.fieldName != 'miles' && f.isArray">
+                            <div class="dynmic-selected-items" *ngIf="f.selectedVal.length > 0">
+                                <div class="selected-items">
+                                    <div *ngFor="let item of f.selectedVal; let t=index" class="tag-text tag-view-txt {{f.fieldName}}-tag-text">
+                                        <span>{{item}}</span>
+                                    </div>
+                                    <div *ngIf="f.selectedVal.length == 0" [innerHtml]="emptyCont"></div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </p-accordionTab>
+    </p-accordion>
+</div>

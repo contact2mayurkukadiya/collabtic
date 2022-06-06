@@ -1,0 +1,23 @@
+.header-row {
+    margin: 0 auto;
+    display: block;   
+    padding: 18px 16px;
+}
+.edit-text {    
+    font-family: Roboto-Bold;
+    color: #000000;
+    font-size: 18px;
+    text-align: center;
+    font-weight: normal;
+    padding-right: 15px;
+    .red-text{
+        color: #e55554;
+    }    
+}
+.new-text {   
+    font-family: Roboto-Bold;
+    color: #e55554;
+    font-size: 18px;
+    text-align: center;
+    font-weight: normal;    
+}

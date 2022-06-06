@@ -1,0 +1,41 @@
+.breadcrumb > li + li:before {
+    content: "";
+    background: url(/assets/images/documents/breadcrumb-arrow.png) no-repeat 0px 3px;
+    width: 10px;
+    height: 20px;
+    margin-top: 3px;
+    margin-right: 5px;
+}
+.docbreadcrumb nav {
+    display: inline-block;
+    position: absolute;
+    margin-top: 3px;
+}
+.breadcrumb{
+    background-color:unset !important;
+    padding: 0px !important;
+    li {
+        font-size: 15px;
+    }
+}
+.breadcrumb-home{
+    background: url(/assets/images/documents/breadcrumb-home.png) no-repeat 0px 0px;
+    width: 35px;
+    height: 30px;
+    display: inline-block;
+}
+
+// ol:first-child {
+
+//   }
+ 
+
+.breadcrumb-item a{
+    background-color:unset;
+    font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  text-align: left;
+  color: #4e5257 !important;
+}

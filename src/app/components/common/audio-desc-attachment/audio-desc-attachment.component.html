@@ -1,0 +1,11 @@
+<div *ngIf="audioAttachment.length == 0" class="audio-attachment-section cursor">
+    <div class="audio-col from-pc" (click)="selectFile.click()">
+        <input style="display: none" type="file" accept='audio/*'
+            (change)="onFileUpload($event)" #selectFile />
+        <span class="upload-txt">{{chooseLable}}</span>
+    </div>
+    <div class="audio-col audo-rec">Record</div>
+</div>
+<div *ngIf="audioAttachment.length > 0" class="audio-attachment">
+    Audio Attachment View
+</div>

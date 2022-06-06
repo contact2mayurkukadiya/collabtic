@@ -1,0 +1,98 @@
+<div class="heading d-flex align-items-center">
+  <img src="assets/images/gts/input.png" class="mr-2" alt="Input">
+  <span>User Provided Inputs</span>
+</div>
+
+<p-card *ngFor="let input of userInputs">
+  <div class="field">
+
+    <div class="w-100 d-flex justify-content-between">
+      <label for="username1" class="text-dark">{{ input.authorInput }}</label>
+      <i style="color: #b5b5b5;" *ngIf="input.isRequired">Required</i>
+    </div>
+
+    <div *ngIf="input.userInput == 1">
+      <input id="username1" *ngIf="!input.minValue || !input.maxValue" type="username"
+        [(ngModel)]="input.userActionValue" pInputText />
+
+      <span class="w-100 p-inputnumber p-component">
+        <div class="inputNumber">
+          <div class="prebutton" *ngIf="input.unitValue != '' && input.unitValue == 'Volts'">
+            <img src="assets/images/gts/bolt.png" alt="">
+          </div>
+          <input placeholder="Enter {{input.unitValue}}" class="p-inputnumber-input p-inputtext p-component p-filled"
+            *ngIf="input.minValue || input.maxValue" (blur)="validateInputValue($event, input)"
+            [(ngModel)]="input.userActionValue" inputId="minmaxfraction" type="tel" />
+          <div class="afterButton" *ngIf="input.unitValue != ''">
+            {{input.unitValue}}
+          </div>
+        </div>
+
+      </span>
+
+      <span *ngIf="processSteps.isValidate == false">
+        <p class="text-danger">
+          Please enter a valid value between {{input.minValue}} and {{input.maxValue}}
+        </p>
+      </span>
+
+    </div>
+
+    <p-dropdown appendTo="body" *ngIf="input.userInput == 2" [options]="input.dropDownValues" placeholder="Select"
+      [(ngModel)]="input.userActionValue" (onChange)="updateValue($event, input)" styleClass="w-100">
+    </p-dropdown>
+
+    <div *ngIf="input.userInput == 3">
+
+      <app-file-attachment class="attachment-file" [action]="manageAction"
+        [showAttachment]="gtsApi.fileDatasPrev.length < gtsApi.fileDatas.items?.length" [apiData]="gtsApi.postApiData"
+        (uploadedItems)="attachments($event)"></app-file-attachment>
+
+      <!-- {{gtsApi.fileDatas?.items?.length | json}} -->
+      <!-- <div style="display: flex; justify-content: flex-end;"
+        *ngIf="gtsApi.fileDatasPrev.length < gtsApi.fileDatas.items.length"
+        (click)="gtsApi.checkUploadAttachmentMedia()">
+        <div class="uploadButton">
+          <img src="assets/images/upload-icon.png" style="width: 14px; margin-right: 10px;" /> Upload Attachment
+        </div>
+      </div> -->
+
+
+      <div class="attachment-view-info" *ngFor="let fileData of gtsApi.fileDatasPrev;let i= index">
+        <div class="attachment-outer">
+          <div class="attachment-left-outer" style="background-image: url('{{fileData?.thumbFilePath}}');">
+            <div class="profile-outer">
+
+            </div>
+          </div>
+          <div class="attachment-center-outer">
+            <div class="attachment-heading">
+              <div class="title">
+                {{fileData?.fileCaption}}
+              </div>
+              <div class="sub-title">
+                <div class="sub-heading">{{fileData?.originalFileName}}</div>
+                <div class="file-kb-info">.{{fileData?.fileSize}}</div>
+              </div>
+
+            </div>
+            <div class="language-button">
+              <button class="English" *ngIf="fileData?.selectedLang.length > 0">{{fileData?.selectedLang}}</button>
+            </div>
+          </div>
+          <div class="attachment-delete">
+            <div class="delete-icon" (click)="removeAttachment(i)">
+              <img src="../../../../../assets/images/Group 2332.png" alt="">
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+      <!-- <app-attachment-view [action]="EditAttachmentAction" [access]="pageAccess" [attachments]="attachmentItems"
+        (attachmentAction)="attachmentAction($event)"></app-attachment-view> -->
+      <!-- <app-attachment-view *ngIf="!post.attachmentLoading" [loading]="post.attachmentLoading" [action]="post.action" [dynamicGid]="post.postId" [access]="pageAccess"  [attachments]="post.attachments"></app-attachment-view> -->
+    </div>
+  </div>
+</p-card>

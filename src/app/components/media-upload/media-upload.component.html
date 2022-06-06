@@ -1,0 +1,54 @@
+<div class="custom-modal upload-modal modal-container" id="wrapper" >
+    <div class="modal-header">
+        <div class="head-row">
+            <div class="head-col title">
+                <h6 class="modal-title attachment-title text-left">Attachments</h6>
+            </div>
+            <div class="head-col text-right">
+                <div class="search">
+                    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+                        <a *ngIf="!searchTick && !searchClose" class="search-icon"><img alt="Search"
+                            src="{{ assetPath }}/search-icon.png" /></a>
+                        <input autofocus type="text" class="form-control search-control"
+                          [(ngModel)]="searchVal" id="searchKey" formControlName="searchKey" maxlength="50"
+                          [readonly]="searchReadonlyFlag" placeholder="{{ searchPlacehoder }}"
+                          (input)="onSearchChange($event.target.value)"
+                          [ngClass]="{ 'is-invalid': submitted && f.searchKey.errors }" />
+                        <a *ngIf="searchClose" class="search-actions search-close" (click)="clearSearch()"><img alt="Search Close"
+                            src="{{ searchCloseImg }}" /></a>
+                        <a *ngIf="searchTick" class="search-actions search-tick" (click)="onSubmit()"><img alt="Search"
+                            src="{{ searchImg }}" /></a>
+                      </form>
+                </div>
+                <div class="close-icon cursor" title="Close" (click)="close()"></div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="attachment-head">
+            <div class="head-col tab-area">
+                <ul class="tab-list">
+                    <li class="{{tab.class}}" *ngFor="let tab of attachmentTabs;" (click)="changeTab(tab)" [ngClass]="{'active' : tab.isSelected, 'disable': !tab.isActive}"><span>{{tab.title}}</span></li>
+                </ul>
+            </div>
+            <div class="head-col actions text-right">
+                <ul class="action-col">
+                    <li class="action-item">
+                        <div class="apply" [ngClass]="{'active cursor': mediaFile, 'inactive':  !mediaFile}" (click)="applySelection()">
+                            <span class="tick-icon">L</span>
+                            <span class="text">Apply</span>
+                        </div>
+                    </li>
+                    <li class="action-item">
+                        <div class=" view thumb-view cursor inactive" [ngClass]="{'thumb-view': !thumbView, 'list-view': thumbView}" title="{{thumbView ? 'List View' : 'Thumb View'}}" (click)="changeView(thumbView)"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="attachment-body">
+            <ng-container *ngFor="let tab of attachmentTabs;">
+                <app-media-attachment class="system-selection" *ngIf="tab.tab == 'media' && tab.isSelected" [mediaSelectionList]="mediaList" [attachmentList]="attachmentList" [apiData]="apiData"></app-media-attachment>
+            </ng-container>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,99 @@
+<div id="header" *ngIf="!msTeamAccess">
+    <app-product-header *ngIf="!headerFlag" [pageData]="headerData" (search)="applySearch('emit', $event)"></app-product-header>
+    <!--app-product-header *ngIf="headerFlag" [pageData]="headerData" (search)="applySearch('emit', $event)"></app-product-header-->
+</div>
+<div class="left-section hide">
+    <div class="first-left-width">
+      <nav id="nav-sidebar">
+        <app-sidebar [pageData]="sidebarActiveClass" accessModule="{{bodyClass}}"></app-sidebar>
+      </nav>
+    </div>
+</div>
+<div class="prob-index split-sec1">
+    <div class="container-fluid">
+        <div class="row col-lg-12 col-md-12 col-sm-12 landing-padding0 landing-margin0">
+            <div *ngIf="!msTeamAccess" class="threads-page-filter col col-lg-2  col-md-2 col-xl-2 col-sm-2 padding-right-class">
+                <div class="text-thread-title">
+                    <span>
+                        <!-- <img class="thread-img" src="assets/images/landing-page/thread-normal.png"> -->
+                        <span class="thread-img">
+                            <img src="assets/images/landing-page/thread-normal.svg" onload="SVGInject(this)">
+                        </span>
+                    </span>
+                    <span>{{headTitle}}s</span>						
+                </div>
+                <div class="cbt-filter thread-filter" [ngClass]="{'filter-expand': expandFlag, 'filter-collapse': !expandFlag}">
+                    <app-filter *ngIf="filterLoading" (toggle)="expandAction($event)" [filterOptions]="filterOptions" (filterAction)="applyFilter($event)"></app-filter>
+                    <app-filter *ngIf="!filterLoading" (toggle)="expandAction($event)" [filterOptions]="filterOptions" (filterAction)="applyFilter($event)"></app-filter>
+                </div>
+            </div>
+            <div [ngClass]="{'col col-lg-12 col-md-12 col-xl-12 col-sm-12': msTeamAccess, 'col col-lg-8 col-md-8 col-xl-8 col-sm-8': !msTeamAccess }" class="center-middle-width-container">
+                <div class="center-middle-width padding-common">
+                    <div class="thread-top-section">
+                        <div class="thread-top-left" [ngClass]="{'thread-top-left-ms': msTeamAccess, 'set-width-not-ms': !msTeamAccess }">
+                            <div *ngIf="msTeamAccess" class="text-thread-title ms-title-text">
+                                <span >
+                                    <img class="thread-img" src="assets/images/landing-page/thread-normal.png">
+                                </span>
+
+                                <span tooltipClass="help-content-tooltip sidebarTeam" container="body" triggers="manual" [autoClose]="false" placement="right-top" [ngbTooltip]="threadsTT" #ttthreads="ngbTooltip">Threads</span>					
+                                <ng-template #threadsTT>
+                                    <div class="tt-helpcontent-container">
+                                        <div class="tt-bg-image {{thelpContentIconName}}"></div>
+                                        <div class="tt-title">
+                                            <div class="lt-img {{thelpContentIconName}}"></div>
+                                            <div class="rt-text">{{thelpContentTitle}}</div>
+                                        </div>
+                                        <div class="tt-desp">{{thelpContentContent}}</div>
+                                        <div class="tt-next-text" (click)="helpContent(thelpContentId)">DONE</div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                            <div class="cursor thread-add-new"  [ngClass]="{'thread-add-new-ms': msTeamAccess, 'ms-thread-add-web': msTeamAccess }" (click)="navPart()">                            
+                                <span class=""><i style="font-size: 13px;margin-right: 4px;" class="pi pi-plus"></i></span><span >{{newThreadTxt}}</span>                            
+                            </div>
+
+                            <span (click)="navPart()" *ngIf="msTeamAccess" [ngClass]="{'thread-add-new-ms': msTeamAccess, 'ms-thread-add-mobile': msTeamAccess}" ><img src="assets/images/mobile-add.png"></span> 
+                    
+                            <div *ngIf="!msTeamAccess" class="thread-sort-option">
+                                <p-dropdown class="select-thread-sort"  appendTo="body" [options]="threadSortOptions" [(ngModel)]="selectedCity1" placeholder="" optionLabel="name" (onChange)="selectEventSort($event)" ></p-dropdown>
+                            </div> 
+                            <div *ngIf="!msTeamAccess"  class="thread-order-option">
+                                <p-dropdown class="select-thread-order"  appendTo="body" [options]="threadOrderOptions" [(ngModel)]="selectedCity2" placeholder="" optionLabel="name" (onChange)="selectEventOrder($event)" ></p-dropdown>
+                            </div>
+                            <div *ngIf="!msTeamAccess && domainId==52"  class="thread-order-option" >
+                                <p-dropdown class="select-thread-order"  appendTo="body" [options]="threadFeedbackSortOptions" [(ngModel)]="selectedCity3" placeholder="" optionLabel="name" (onChange)="selectEventFilterOrder($event)" ></p-dropdown>
+                            </div> 
+                        </div>
+                        <div class="thread-top-right" [ngClass]="{'ms-thread-top-right': msTeamAccess}" >
+                            <!--app-common-notifications class="mobile-notification"></app-common-notifications--> 
+                            <div (click)="taponpin()" class="icon-right cursor icon-pin">
+                                <img *ngIf="!yourpined" src="assets/images/mobile-pin.png">
+                                <img *ngIf="yourpined" src="assets/images/mobile-pin-active.png">             
+                            </div>
+                            <div (click)="taponSearchPage()" *ngIf="msTeamAccess" class="icon-right cursor mobile-search">
+                                <img src="assets/images/mobile-search.png">                                          
+                            </div>
+                            <div (click)="msLoginOut()" *ngIf="msTeamAccess" class="icon-right cursor mobile-logout">
+                                <img src="assets/images/mobile-logout.png">                                          
+                            </div>
+
+                            <div *ngIf="!msTeamAccess" class="cursor" (click)="viewType(thumbView)" class="icon-right ">
+                                <div class="thread-icon-right cursor" title="{{thumbView ? 'List View' : 'Thumb View'}}" [ngClass]="{'thread-list-icon': thumbView, 'thread-thumb-icon': !thumbView }"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="probing-content cbt-content part-content part-content-threads-new">
+                        <app-threads-page [pageDataInfo]="pageData" [filterOptions]="filterOptions" (toggle)="expandAction($event)" (filterOutput)="filterOutput($event)"></app-threads-page>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!msTeamAccess" class="right-middle-width-container landing-padding0  col col-lg-2  col-md-2 col-xl-2 col-sm-2 padding-right-class">
+                <div class="right-width-column padding-common">
+                    <app-domain-members ></app-domain-members>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

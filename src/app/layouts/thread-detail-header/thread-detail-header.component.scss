@@ -1,0 +1,94 @@
+.td-head {
+  padding: 16px 20px 14px 30px;
+
+  .left-head {
+    .thread-text {
+      font-family: Roboto-Bold;
+      color: var(--ID80);
+      font-size: 20px;
+      text-align: left;
+      font-weight: normal;
+      padding-right: 15px;
+
+      .red-text {
+        color: #e55554;
+      }
+
+      .team-back-icon {
+        background: url("../../../assets/images/common/back-icon.png") no-repeat no-repeat 0px 1px;
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        position: relative;
+        top: 8px;
+      }
+    }
+
+    .thread-status {
+      position: relative;
+      top: -3px;
+      text-transform: uppercase;
+    }
+  }
+
+  .right-head {
+    ul {
+      margin: 0;
+      padding: 0;
+      text-align: right;
+
+      li {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+
+        &.paddingR30 {
+          padding-right: 30px;
+        }
+
+        &.paddingL30 {
+          padding-left: 30px;
+        }
+
+        a {
+          margin: 0;
+          padding: 0;
+          display: block;
+
+          img {
+            display: inline-block;
+
+            &.mleft60 {
+              margin-left: 60px;
+            }
+          }
+
+          span {
+            font-family: Roboto-Regular;
+            // color: #e55554;
+            color: var(--ID82);
+            font-size: 14px;
+            margin-left: 10px;
+          }
+
+          svg {
+            color: var(--ID82);
+          }
+        }
+
+        button.start-gts-btn {
+          background-color: #fa972d;
+          border: 1px solid #fa972d;
+          color: #fff;
+          padding: 0.5rem;
+          border-radius: 10px;
+          font-size: 14px;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          width: 115px;
+        }
+      }
+    }
+  }
+}

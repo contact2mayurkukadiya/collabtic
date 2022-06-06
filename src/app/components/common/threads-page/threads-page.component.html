@@ -1,0 +1,366 @@
+<div align="center" #listDiv class="container-fluid thread-page-container" align="center" style="margin: 0 auto;" [ngClass]="{ 'thread-list-page-container': !thumbView }">
+    <div class="top-container">
+        <div class="sub-group-container" *ngIf="CBADomian && threadSubTypeFlag" [style.width.px]="setTWidth">  
+            <div class="ps subTabWidth">
+                <div [perfectScrollbar]="sconfig">
+                    <div class="sub-group-inner-container">                    
+                        <ul>
+                            <li *ngFor="let subType of threadSubTypeDataArr" class="sub-tab" [ngClass]="{ 'selected-sub-tab' : subType.selected, 'normal-sub-tab' : !subType.selected }" (click)="onChangeSubTab(subType.subThreadType, subType.selected)">{{subType.name}}</li>                        
+                        </ul>               
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="thread-container" [style.height]="'calc(100vh - '+rmHeight+'px)'">        
+        <div #top align="center" id="thread-data-container" class="row display-flex row-data thread-scroll-container" [ngClass]="{'opacity': opacityFlag}" [perfectScrollbar]="sconfig" (scroll)="onScroll($event)">        
+            <div *ngIf="!loadingthread && (displayNoRecords || displayNoRecordsDefault)" class="no-item-list no-res-list text-center">
+                <app-empty-container [redirectionPage]="redirectionPage" [pageTitleText]="pageTitleText" [showType]="displayNoRecordsShow" [newPartInformation]="newThreadInfo" [contentTypeDefaultNewImg]="contentTypeDefaultNewImg" [contentTypeValue]="contentTypeValue" [contentTypeDefaultNewText]="contentTypeDefaultNewText" [contentTypeDefaultNewTextDisabled]="contentTypeDefaultNewTextDisabled" [actionUrl]="createThreadUrl"></app-empty-container>
+            </div>            
+            <div class="loading-small-screen-scroll trst" align="center" *ngIf="loadingthread && !centerloading && !hideFlag" ><img src="assets/images/loading.svg" alt="Loader" /></div>
+            <div *ngIf="pageDataInfo=='4' || pageDataInfo=='2' || pageDataInfo=='6'" >
+                <div *ngIf="thumbView">
+                    <ngx-masonry [options]="{ gutter: 10,isFitWidth: true }" class="masonry-item-container"   [updateLayout]="updateMasonryLayout" [ordered]="true">
+                        <div ngxMasonryItem id="{{threadList.threadId}}" class="masonry-item" data-masonry='{ "columnWidth": 200, "itemSelector": ".grid-item" }' *ngFor="let threadList of threadListArray; let trd = index">
+                            <div class="thread-bg cursor" (click)="threadClick(threadList, $event)">
+                                <div class="thread-status" [style.background-color]="threadList.threadStatusBgColor">
+                                    <div [style.color]="threadList.threadStatusColorValue" align="center">{{threadList.threadStatus}}<span *ngIf="threadList.summitFix == '1' && threadList.closeStatus">&nbsp;-&nbsp;{{threadList.scorePoint}}</span></div>
+                                    <div class="new-tap-icon" title="Open new tab" (click)="threadClick(threadList, $event, 'new');$event.stopPropagation();"></div>
+                                </div>
+                                <div class="container-fluid row profile-container no-gutters">
+                                    <div class="col col-lg-8 col-md-8 col-xl-8  col-sm-8 profileimg-container">
+                                        <span class="bg-image-new-thread {{threadList.newNotificationState}} bg-image-new-thread{{threadList.threadId}}  new-announcement-tag"></span>
+                                        <div class="profile-left-container" >
+                                            <img class="profileImg {{threadList.badgeTopUser}}" [src]="threadList.profileImage" onerror="this.src='assets/images/thumb_profile_image.png'" />
+                                           
+                                            <span class="availability-status availability-status{{threadList.availability}}"></span>
+                                        </div>
+                                        <div class="profile-right-container">
+                                            
+                                            <div class="user-name" title="{{threadList.userName}}">
+                                               <span *ngIf="threadList.badgeTopUser"> <img class="profile-topbadge-user" src="assets/images/thread/crownicon.svg"/></span>
+                                               <span> {{threadList.userName}}</span>
+                                            </div>
+                                            <div class="buss-title" title="{{threadList.badgeStatus}}">
+                                                {{threadList.badgeStatus}}
+                                            </div>
+                                            <div class="buss-title posted-from" [ngClass]="{'no-title': threadList.badgeStatus == ''}" title="{{threadList.postedFrom}}">
+                                                {{threadList.postedFrom}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-lg-4 col-md-4 col-xl-4 col-sm-4 date-container">
+                                        <div class="date-title">{{threadList.date}}</div>
+                                        <div class="date-title">{{threadList.time}}</div>
+                                        <div class="id-title">ID #{{threadList.threadId}}</div>
+                                    </div>
+                                </div>
+                                <div class="makemodelcontent">
+                                    <span class="esc-make" title="{{threadList.make}}">{{threadList.make}}</span> <i style="font-size: 11px;vertical-align: text-top;margin-top: 0px;" class="pi pi-chevron-right"></i>  <span class="esc-model" title="{{threadList.model}}">{{threadList.model}}</span>    
+                                    <span *ngIf="industryType.id == 2"><i style="font-size: 11px;vertical-align: text-top;margin-top: 0px;" class="pi pi-chevron-right"></i>  <span class="esc-model">{{threadList.year}}</span></span>
+                                    <span class="esc-model" style="float: right;padding-right:5px;margin:1px;border-radius: 8px;" [style.background-color]="threadList.escColorCodes" [style.color]="threadList.escColorCodesValue" *ngIf="domainId==52 && threadList.escalateStatus!=''"><img style="padding-right: 2px;margin-top: -2px;" src="assets/images/thread/escalation-icon1-list.png"/><span>{{threadList.escalateStatus}}</span></span>  
+                                </div>
+                                <div *ngIf="threadList.threadTitle" title="{{threadList.threadTitle}}" class="esc-thread-title">{{threadList.threadTitle}}</div>
+                                <div *ngIf="threadList.curentDtclength" class="dtcCodedesc">
+                                    <div  *ngFor ="let dtcInfo of threadList.currentDtc; let i=index" >
+                                        <div *ngIf="i=='0'" style="height: 21px;">
+                                            <span class="dtcInfo-icon dtcInfo-icon-new active" [ngClass]="{'engine-icon': industryType.id == 2}">
+                                                <img class="dtc " [ngClass]="{'engine-dtc': industryType.id == 2}" src="{{errorDtcActiveIcon}}" alt="Loader" onload="SVGInject(this)" />
+                                            </span>
+                                            <span class="dtcInfo-code" title="{{dtcInfo.code}}">{{dtcInfo.code}}</span>
+                                            <span class="dtcInfo-desc" title="{{dtcInfo.description}}" *ngIf="dtcInfo.description"> - {{dtcInfo.description}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="!threadList.curentDtclength" class="dtcCodedesc">
+                                    <span class="dtcInfo-icon dtcInfo-icon-new">
+                                        <img class="dtc " [ngClass]="{'engine-dtc': industryType.id == 2}" src="{{errorDtcIcon}}" alt="Loader" />
+                                    </span>
+                                    <span class="dtcInfo-noerrorcode">
+                                        No Error Code
+                                    </span>  
+                                </div>
+                                <div class="thread-attachments" align="center" *ngIf="threadList.uploadContents && threadList.uploadContents.length>0 && pageDataInfo=='4'">
+                                    <div class="attachment-container" *ngFor=" let uploadContents of threadList.uploadContents; let i=index ">
+                                        <div *ngIf="i==0" align="center">
+                                            <div *ngIf="uploadContents.flagId == MediaTypeInfo.Image">
+                                                <img class="image-width"  src="{{uploadContents.thumbFilePath}}" />
+                                                <div class="img-caption">
+                                                    <span>{{uploadContents.fileCaption}}</span>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="uploadContents.flagId == MediaTypeInfo.Video">
+                                                <video class="lg-video-object video-width lg-html5" controls poster="{{uploadContents.posterImage}}" preload="none">
+                                                    <source src="{{uploadContents.filePath}}" type="{{uploadContents.fileType}}">
+                                                    Your browser does not support HTML5 video.
+                                                </video>
+                                                <div class="img-caption">
+                                                    <span>{{uploadContents.fileCaption}}</span>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="uploadContents.flagId == MediaTypeInfo.Audio">
+                                                <audio class="lg-video-object lg-html5 audio-vidth" controls>
+                                                    <source src="{{uploadContents.filePath}}" type="{{uploadContents.fileType}}">
+                                                    Your browser does not support the audio element.
+                                                </audio>
+                                                <div class="img-caption">
+                                                    <span>{{uploadContents.fileCaption}}</span>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="uploadContents.flagId == MediaTypeInfo.Pdf">
+                                                <div class="pdf-attachments">
+                                                    <div class="pdf-width">
+                                                        <img src="assets/images/workstreams-page/pdf-icon.svg">
+                                                    </div>
+                                                    <div class="pdf-caption">
+                                                        <span>{{uploadContents.fileCaption}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="uploadContents.flagId == MediaTypeInfo.Documents">
+                                                <div class="pdf-attachments">
+                                                    <div class="pdf-width">
+                                                        <img *ngIf="DocfileExtensionTypes.docx==uploadContents.fileExtension || DocfileExtensionTypes.doc==uploadContents.fileExtension" src="assets/images/workstreams-page/doc-icon.svg">
+                                                        <img *ngIf="DocfileExtensionTypes.pptx==uploadContents.fileExtension || DocfileExtensionTypes.ppt==uploadContents.fileExtension" src="assets/images/workstreams-page/ppt-icon.svg">
+                                                        <img *ngIf="DocfileExtensionTypes.xls==uploadContents.fileExtension || DocfileExtensionTypes.xlsx==uploadContents.fileExtension" src="assets/images/workstreams-page/xls-icon.svg">
+                                                        <!--img *ngIf="DocfileExtensionTypes.exe==uploadContents.fileExtension" src="assets/images/documents/exe-big-icon.png"-->
+                                                        <img *ngIf="DocfileExtensionTypes.html==uploadContents.fileExtension" src="assets/images/workstreams-page/html-icon.svg">
+                                                    </div>
+                                                    <div class="pdf-caption">
+                                                        <span>{{uploadContents.fileCaption}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="uploadContents.flagId == MediaTypeInfo.Link">
+                                                <div *ngIf="uploadContents.videoId" >
+                                                    <youtube-player   class="youtube-class" [videoId]="uploadContents.videoId"></youtube-player>
+                                                    <div class="clear"></div>
+                                                    <div class="img-caption-youtube">
+                                                        <span>{{uploadContents.fileCaption}}</span>
+                                                    </div> 
+                                                </div>
+                                                <div *ngIf="!uploadContents.videoId" class="link-attachments">
+                                                    <div *ngIf="uploadContents.thumbFilePath" class="thirdparty">
+                                                        <img class="link-width-thumb" src="{{uploadContents.thumbFilePath}}">
+                                                    </div>
+                                                    <div *ngIf="!uploadContents.thumbFilePath" class="default">
+                                                        <img src="assets/images/workstreams-page/link-icon.svg">
+                                                    </div>    
+                                                    <div class="img-caption-link">
+                                                        <span *ngIf="uploadContents.fileCaption">{{uploadContents.fileCaption}}</span>
+                                                        <span *ngIf="!uploadContents.fileCaption">{{uploadContents.filePath}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="threadList.moreAttachments && pageDataInfo=='4'" style="padding-right: 20px;height: 15px;" align="right"><img src="assets/images/thread/three-dots-more-thread.png"></div>
+                                <div class="bottom-border"></div>
+                                <div class="footer-selection">
+                                    <div class="thread-footer-container">
+                                        <div class="tf-col thread-footer-left">
+                                            <ul>
+                                                <li class="tf-icon like" *ngIf="threadList.likeCount">{{threadList.likeCount}}</li>
+                                                <li class="tf-icon pin" *ngIf="threadList.pinCount">{{threadList.pinCount}}</li>
+                                                <li class="tf-icon view" *ngIf="threadList.viewCount">{{threadList.viewCount}}</li>
+                                                <li class="tf-icon reply" *ngIf="threadList.replyCount">{{threadList.replyCount}}</li>
+                                            </ul>
+                                        </div>
+                                        <div class="tf-col thread-footer-right">
+                                            <ul>
+                                                <li class="blub-icon-col close-fix" [title]="threadCloseTxtTxt" *ngIf="threadList.closeStatus"></li>
+                                                <li class="blub-icon-col share-fix" [title]="shareFixTxt" *ngIf="threadList.shareFix && threadList.summitFix=='0'"></li>
+                                                <li class="blub-icon-col summit-fix" [title]="shareSummitFixTxt" *ngIf="threadList.shareFix && threadList.summitFix=='1'"></li>
+                                                <li class="blub-icon-col proposed-fix" [title]="proposedFixTxt" *ngIf="!threadList.shareFix && threadList.fixStatus=='yes' && threadList.fixPostStatus=='0'"></li>
+                                                <li class="blub-icon-col thread-fix" [title]="threadwithFixTxt" *ngIf="!threadList.shareFix && threadList.fixStatus=='yes' && threadList.fixPostStatus=='1'"></li>
+                                                <li class="blub-icon-col help-fix" [title]="threadwithHelpfulFixTxt" *ngIf="!threadList.shareFix && threadList.fixStatus=='yes' && threadList.fixPostStatus=='2'"></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="thread-footer-container hide">
+                                        <div class="ft-col lft like-small" *ngIf="threadList.likeCount">
+                                            <span class="lft footer-icon">
+                                                <img src="assets/images/workstreams-page/like-icon.svg" alt="Loader" />
+                                            </span> 
+                                            <span class="lft text-color-footer">{{threadList.likeCount}}</span>  
+                                        </div>
+                                        <div class="ft-col lft pin-small" *ngIf="threadList.pinCount">
+                                            <span class="lft footer-icon">
+                                                <img src="assets/images/workstreams-page/pin-icon.svg" alt="Loader" />
+                                            </span> 
+                                            <span class="lft text-color-footer">{{threadList.pinCount}}</span>  
+                                        </div>
+                                        <div class="ft-col lft view-small" *ngIf="threadList.viewCount">
+                                            <span class="lft footer-icon">
+                                                <img src="assets/images/workstreams-page/view-icon.svg" alt="Loader" />
+                                            </span> 
+                                            <span class="lft text-color-footer">{{threadList.viewCount}}</span>  
+                                        </div>
+                                        <div class="ft-col lft view-reply" *ngIf="threadList.replyCount">
+                                            <span class="lft footer-icon">
+                                                <img src="assets/images/workstreams-page/comment-icon.svg"  alt="Loader" />
+                                            </span> 
+                                            <span class="lft text-color-footer">{{threadList.replyCount}}</span>  
+                                        </div>
+                                        <div class="rht bulb-small" [title]="shareFixTxt" *ngIf="threadList.shareFix">
+                                            <span class="lft footer-icon">
+                                                <img class="footer-bulb-icon" src="assets/images/workstreams-page/shareFix-icon.svg" alt="Loader" />
+                                            </span> 
+                                        </div>
+                                        <div class="rht bulb-small"  [title]="proposedFixTxt" *ngIf="!threadList.shareFix && threadList.fixStatus=='yes' && threadList.fixPostStatus=='0'">
+                                            <span class="lft footer-icon">
+                                                <img class="footer-bulb-icon" src="assets/images/workstreams-page/gray-bulb-icon.svg" alt="Loader" />
+                                            </span> 
+                                        </div> 
+                                        <div class="rht bulb-small"  [title]="threadwithFixTxt" *ngIf="!threadList.shareFix && threadList.fixStatus=='yes' && threadList.fixPostStatus=='1'">
+                                            <span class="lft footer-icon">
+                                                <img class="footer-bulb-icon" src="assets/images/workstreams-page/green-bulb-icon.svg" alt="Loader" />
+                                            </span> 
+                                        </div> 
+                                        <div class="rht bulb-small"  [title]="threadwithHelpfulFixTxt" *ngIf="!threadList.shareFix && threadList.fixStatus=='yes' && threadList.fixPostStatus=='2'">
+                                            <span class="lft footer-icon">
+                                                <img class="footer-bulb-icon" src="assets/images/workstreams-page/yellow-bulb-icon.svg" alt="Loader" />
+                                            </span> 
+                                        </div> 
+                                        <div class="rht close-small"  [title]="threadCloseTxtTxt" *ngIf="threadList.closeStatus">
+                                            <span class="lft footer-icon">
+                                                <img class="footer-bulb-icon" src="assets/images/workstreams-page/close_icon.svg" alt="Loader" />
+                                            </span> 
+                                        </div>          
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ngx-masonry>        
+                </div>
+                <div *ngIf="!thumbView">            
+                    <div class="prob-list-cont ">
+                        <div class="inner-container1 mat-inner-container1 documents-grid-row documents-grid-row-new" [style.height.px]="listHeight">
+                            <div *ngIf="!displayNoRecords && !displayNoRecordsDefault" id="matrixTable" class="mat-elevation-z8 gts-mat-table matrix-table parts-mat-table parts-mat-table-ts">
+                                <p-table #table [columns]="cols" [scrollable]="true" [totalRecords]="threadListArray.length" id="file-datatable" [ngClass]="{'opacity': opacityFlag}" class="file-datatable thread-list-table" [value]="threadListArray" [scrollHeight]="pTableHeight" (scroll)="scroll($event)">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr *ngIf="!displayNoRecords" >
+                                            <th *ngFor="let col of columns" class="{{col.columnpclass}}">    
+                                                {{col.header}}
+                                                <!--span *ngIf="col.field == 'createdOn' || col.field == 'id'"><p-sortIcon [field]="col.field"></p-sortIcon></span-->
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-threadListArray let-i="rowIndex">
+                                        <tr class="cursor" id="{{threadListArray.threadId}}">                                                        
+                                            <td class="w1 thl-col-1 col-sticky {{threadListArray.newNotificationState}}" (click)="threadClick(threadListArray, $event);">
+                                                <!--span class="hide p-table-col" title="{{threadListArray.userName}}">{{threadListArray.userName}}</span-->
+                                                <div class="thread-bg p-table-col">
+                                                    <div class="profile-container">
+                                                        <div class="profileimg-container">
+                                                            <div class="profile-left-container" >
+                                                                <img class="profileImg" [src]="threadListArray.profileImage" onerror="this.src='assets/images/thumb_profile_image.png'"/>
+                                                                <span class="availability-status availability-status{{threadListArray.availability}}"></span>
+                                                            </div>
+                                                            <div class="profile-right-container">
+                                                                <div class="user-name" title="{{threadListArray.userName}}">  
+                                                                    {{threadListArray.userName}}
+                                                                </div>
+                                                                <div class="buss-title" title="{{threadListArray.badgeStatus}}">
+                                                                    {{threadListArray.badgeStatus}}
+                                                                </div>
+                                                                <div class="buss-title posted-from" [ngClass]="{'no-title': threadListArray.badgeStatus == ''}" title="{{threadListArray.postedFrom}}">
+                                                                    {{threadListArray.postedFrom}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="w2 thl-col-2 col-sticky" (click)="threadClick(threadListArray, $event);"><span class="p-table-col" title="{{threadListArray.threadTitle}}">{{threadListArray.threadTitle}}</span></td>
+                                            <td class="w3 thl-col-3" (click)="threadClick(threadListArray, $event);">
+                                                <div *ngIf="threadListArray.curentDtclength" class="dtcCodedesc tb-width3 p-table-col">
+                                                    <div *ngFor ="let dtcInfo of threadListArray.currentDtc; let i=index">
+                                                        <div *ngIf="i=='0'" style="height: 21px;">
+                                                            <span class="dtcInfo-icon dtcInfo-icon-new active" [ngClass]="{'engine-icon': industryType.id == 2}">
+                                                                <img class="dtc" [ngClass]="{'engine-dtc': industryType.id == 2}" src="{{errorDtcActiveIcon}}" alt="Loader" onload="SVGInject(this)" />
+                                                            </span>
+                                                            <span class="dtcInfo-code" title="{{dtcInfo.code}}">{{dtcInfo.code}}</span>
+                                                            <span class="dtcInfo-desc" title="{{dtcInfo.description}}" *ngIf="dtcInfo.description"> - {{dtcInfo.description}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="!threadListArray.curentDtclength" class="dtcCodedesc">
+                                                    <span class="dtcInfo-icon dtcInfo-icon-new">
+                                                        <img class="dtc " [ngClass]="{'engine-dtc': industryType.id == 2}" src="{{errorDtcActiveIcon}}" alt="Loader" onload="SVGInject(this)" />
+                                                    </span>
+                                                    <span class="dtcInfo-noerrorcode">No Error Code</span>  
+                                                </div>
+                                            </td>
+                                            <td class="w4 thl-col-4" (click)="threadClick(threadListArray, $event);"><span class="p-table-col" title="{{threadListArray.threadId}}">{{threadListArray.threadId}}</span></td>
+                                            <td class="w5 thl-col-5" (click)="threadClick(threadListArray, $event);"><span class="p-table-col" title="{{threadListArray.make}}">{{threadListArray.make}}</span></td>
+                                            <td class="w6 thl-col-6" (click)="threadClick(threadListArray, $event);"><span class="p-table-col" title="{{threadListArray.model}}">{{threadListArray.model}}</span></td>
+                                            <td class="w7 thl-col-7" (click)="threadClick(threadListArray, $event);"><span class="p-table-col" title="{{threadListArray.date}}">{{threadListArray.date}}&nbsp;&nbsp;{{threadListArray.time}}</span></td>
+                                            <td class="w8 thl-col-8" (click)="threadClick(threadListArray, $event);">
+                                                <span class="fix-status-col text-center">
+                                                    <div class="rht bulb-small" [title]="shareFixTxt" *ngIf="threadListArray.shareFix">
+                                                        <span class="lft footer-icon">
+                                                            <img class="footer-bulb-icon" src="assets/images/workstreams-page/shareFix-icon.svg" alt="Loader" />
+                                                        </span> 
+                                                    </div>
+                                                    <div class="rht bulb-small"  [title]="proposedFixTxt" *ngIf="!threadListArray.shareFix && threadListArray.fixStatus=='yes' && threadListArray.fixPostStatus=='0'">
+                                                        <span class="lft footer-icon">
+                                                            <img class="footer-bulb-icon" src="assets/images/workstreams-page/gray-bulb-icon.svg" alt="Loader" />
+                                                        </span> 
+                                                    </div> 
+                                                    <div class="rht bulb-small"  [title]="threadwithFixTxt" *ngIf="!threadListArray.shareFix && threadListArray.fixStatus=='yes' && threadListArray.fixPostStatus=='1'">
+                                                        <span class="lft footer-icon">
+                                                            <img class="footer-bulb-icon" src="assets/images/workstreams-page/green-bulb-icon.svg" alt="Loader" />
+                                                        </span> 
+                                                    </div> 
+                                                    <div class="rht bulb-small"  [title]="threadwithHelpfulFixTxt" *ngIf="!threadListArray.shareFix && threadListArray.fixStatus=='yes' && threadListArray.fixPostStatus=='2'">
+                                                        <span class="lft footer-icon">
+                                                            <img class="footer-bulb-icon" src="assets/images/workstreams-page/yellow-bulb-icon.svg" alt="Loader" />
+                                                        </span> 
+                                                    </div> 
+                                                    <div class="rht close-small"  [title]="threadCloseTxtTxt" *ngIf="threadListArray.closeStatus">
+                                                        <span class="lft footer-icon">
+                                                            <img class="footer-bulb-icon" src="assets/images/workstreams-page/close_icon.svg" alt="Loader" />
+                                                        </span> 
+                                                    </div> 
+                                                    <div *ngIf="threadListArray.closeStatus == 0 && !threadListArray.shareFix && threadListArray.fixStatus=='no'">-</div>
+                                                </span>
+                                            </td>
+                                            <td class="w9 thl-col-9 status-col col-sticky">
+                                                <span class="p-table-col" title="{{threadListArray.threadStatus}}">
+                                                    <div class="status thread-status" [style.background-color]="threadListArray.threadStatusBgColor">
+                                                        <div [style.color]="threadListArray.threadStatusColorValue" align="center">{{threadListArray.threadStatus}}<span *ngIf="threadListArray.summitFix == '1' && threadListArray.closeStatus">&nbsp;-&nbsp;{{threadListArray.scorePoint}}</span></div>
+                                                    </div> 
+                                                    <div id="more" class="more-icon" [matMenuTriggerFor]="more" (click)="$event.stopPropagation();">
+                                                        <!-- <img src="assets/images/more-icon.png" alt="Action" /> -->
+                                                        <img src="assets/images/more-icon.svg" alt="Action" onload="SVGInject(this)" />
+                                                    </div>
+                                                    <mat-toolbar color="primary">
+                                                        <mat-menu #more="matMenu" backdropClass="ptabletmenu">
+                                                            <div class="part-menu">
+                                                                <ul class="more-actions">
+                                                                    <li class="cursor active" (click)="threadClick(threadListArray, $event);$event.stopPropagation();"><img src="assets/images/view.png" alt="View">&nbsp;&nbsp;View</li>
+                                                                    <li *ngIf="threadListArray.threadAcces" class="cursor active" (click)="navThread('edit', threadListArray.threadId)"><img src="assets/images/edit.png" alt="Edit">&nbsp;&nbsp;Edit</li>
+                                                                </ul>
+                                                            </div>
+                                                        </mat-menu>
+                                                    </mat-toolbar>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div align="center" class="thread-loading-text " *ngIf="loadingthreadmore">loading..</div>-->
+</div>
+<div align="center" class="thread-loading-text bottom-loading" *ngIf="loadingthreadmore || centerloading"><img src="assets/images/landing-page/loading-more.svg" alt="Loader" /></div>
+<div align="center" class="thread-loading-text bottom-loading" *ngIf="!loadingthread && !displayNoRecords && nothingtoshow" style="color:#797777;font-size: 14px;top:0px;font-style: italic;"> No more records </div>
+
+ 

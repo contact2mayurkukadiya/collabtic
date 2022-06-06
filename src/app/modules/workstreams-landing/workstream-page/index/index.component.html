@@ -1,0 +1,145 @@
+<div id="header">
+  <app-product-header *ngIf="!headerFlag" [pageData]="headerData" (search)="applySearch('emit', $event)">
+  </app-product-header>
+  <app-product-header *ngIf="headerFlag" [pageData]="headerData" (search)="applySearch('emit', $event)">
+  </app-product-header>
+</div>
+<div class="main-section">
+  <div class="left-section">
+    <div class="first-left-width">
+      <nav id="nav-sidebar">
+        <app-sidebar [pageData]="sidebarActiveClass" accessModule="{{bodyClass}}"></app-sidebar>
+      </nav>
+    </div>
+  </div>
+
+  <div class="right-section">
+    <div class="container-fluid">
+      <div class="row col-lg-12 col-md-12 col-sm-12 landing-padding0 landing-margin0">
+        <!-- -->
+        <div class="col col-lg-2  col-md-2 col-xl-2 col-sm-2 padding-right-class">
+          <div class="second-left-width padding-common">
+            <app-landing-left-side-menu (ReloadChatSection)="RealoadChatPageData($event)" [workstreamId]="workstreamId"
+              [pageData]="sidebarActiveClass"></app-landing-left-side-menu>
+          </div>
+        </div>
+        <div class="center-middle-width-container col col-lg-8 col-md-8 col-xl-8 col-sm-8"
+          [ngClass]="{'col-lg-10 col-md-10 col-xl-10 col-sm-10': (currentContentTypeId == 4 && collapseFlag) || (currentContentTypeId != 4 && collapseFlag)}">
+          <div class="center-middle-width padding-common workstream-center-width">
+            <div class="ps workstreamWidth">
+              <div [perfectScrollbar]="sconfig">
+                <div class="workstream-page-center-menu ">
+                  <div class="workstream-page-center-menu-inner">
+                    <div
+                      class="inline-class ws-tab {{contentTypeWidthClass}} {{contentType.slug}} ws-tab-{{contentType.workstreamId}}"
+                      [ngClass]="{'setOpacity5': contentType.disabled, 'active-tab': contentType.contentTypeId == currentContentTypeId}"
+                      (click)="taponContent(contentType.contentTypeId,contentType.catCount,contentType.isNew, contentType)"
+                      *ngFor="let contentType of getcontentTypesArr; let ct=index">
+                      <span class="workstream-content-count" *ngIf="contentType.catCount && contentType.isNew">
+                        <span *ngIf="contentType.catCount && contentType.catCount < 100">{{contentType.catCount}}</span>
+                        <span *ngIf="contentType.catCount && contentType.catCount > 100">99+</span>
+                      </span>
+                      <div>
+                        <span [ngClass]="{'active': contentType.contentTypeId == currentContentTypeId}">
+                          <img
+                            class="contenttype-img contentTypeId{{contentType.contentTypeId}} img-contenttype img-contenttype{{contentType.contentTypeId}} {{contentType.submenuimageClass}}"
+                            [src]="'assets/images/workstreams-page/'+contentType.urlPath" onload="SVGInject(this)">
+                        </span>
+                      </div>
+                      <div title="{{contentType.name}}" class="content-type-title"> {{contentType.name}}</div>
+                      <div [ngClass]="{'active ': contentType.contentTypeId == currentContentTypeId}"
+                        class="bottom-border border-contenttype border-contenttype{{contentType.contentTypeId}} "></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <app-empty-container *ngIf="currentContentTypeId == 1" [showType]="displayNoRecordsShow"
+              [newPartInformation]="newThreadInfo" [contentTypeDefaultNewImg]="contentTypeDefaultNewImg"
+              [contentTypeValue]="contentTypeValue" [contentTypeDefaultNewText]="contentTypeDefaultNewText"
+              [contentTypeDefaultNewTextDisabled]="contentTypeDefaultNewTextDisabled" [actionUrl]="workstreamId">
+            </app-empty-container>
+
+
+            <!--div [hidden]="isOn1">
+                            <app-threads-page [pageDataInfo]="pageData" [tapfromheader]="outputContentFromLeftMenu" [parentData]="workstreamId"></app-threads-page>
+                        </div>
+
+                        <div [hidden]="isOn2">
+                            <app-documents [accessFrom]="pageAccess"></app-documents>
+                        </div>
+
+                        <div [hidden]="isOn3">
+                            <app-knowledge-articles [pageDataInfo]="pageData" [tapfromheader]="outputContentFromLeftMenu" [parentData]="workstreamId"></app-knowledge-articles>
+                        </div>
+
+                        <div [hidden]="isOn4" class="parts-thumb-view">
+                            <app-parts-list></app-parts-list>
+                        </div>
+                      
+                        <div [hidden]="isOn5" class="parts-thumb-view">
+                            <app-gts-lists></app-gts-lists>
+                        </div>
+
+                        <div [hidden]="isOn6" class="parts-thumb-view">
+                            <app-sib-list ></app-sib-list>
+                        </div>
+
+                        <div [hidden]="currentContentTypeId == 28" class="parts-thumb-view">
+                            <app-knowledge-base-list ></app-knowledge-base-list>
+                        </div-->
+            <div *ngIf="currentContentTypeId == 2 || currentContentTypeId == 24">
+              <app-threads-page [pageDataInfo]="pageData" [tapfromheader]="outputContentFromLeftMenu"
+                [parentData]="workstreamId"></app-threads-page>
+            </div>
+
+            <div *ngIf="currentContentTypeId == 4">
+              <app-documents [accessFrom]="pageAccess"></app-documents>
+            </div>
+
+            <div *ngIf="currentContentTypeId == 7">
+              <app-knowledge-articles [pageDataInfo]="pageData" [tapfromheader]="outputContentFromLeftMenu"
+                [parentData]="workstreamId"></app-knowledge-articles>
+            </div>
+
+            <div *ngIf="currentContentTypeId == 11" class="parts-thumb-view">
+              <app-parts-list [pageDataInfo]="pageData"></app-parts-list>
+            </div>
+
+            <div *ngIf="currentContentTypeId == 6" class="parts-thumb-view gts-thumb-view">
+              <app-gts-lists [pageDataInfo]="pageData"></app-gts-lists>
+            </div>
+
+            <div *ngIf="currentContentTypeId == 16" class="parts-thumb-view">
+              <app-sib-list [pageDataInfo]="pageData"></app-sib-list>
+            </div>
+
+            <div *ngIf="currentContentTypeId == 28" class="parts-thumb-view">
+              <app-knowledge-base-list></app-knowledge-base-list>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-middle-width-container landing-padding0 col padding-right-class"
+          [ngClass]="{'col-lg-2 col-md-2 col-xl-2 col-sm-2 doc-contain': !collapseFlag}">
+          <div class="right-width-column padding-common">
+            <div *ngIf="currentContentTypeId != 4 || emptyFlag">
+              <app-domain-members></app-domain-members>
+            </div>
+            <div *ngIf="currentContentTypeId == 4 && !emptyFlag">
+              <div class="cust-right-panel ws-doc-info-panel info-panel media-info media-info-works"
+                [style.height.px]="innerHeight+110"
+                [ngClass]="{'right-panel-expand': rightPanel, 'right-panel-collapse': !rightPanel || emptyFlag}">
+                <span *ngIf="!rightPanel && !emptyFlag" class="expand-icon cursor"
+                  (click)="toggleInfo(rightPanel)"></span>
+                <app-doc-info *ngIf="!emptyFlag" class="landing-doc-info" [infoLoading]="rightPanel"
+                  [docDetail]="docDetail" [ngClass]="{'hide': (!rightPanel && !emptyFlag) || emptyFlag}"
+                  (toggleAction)="toggleAction($event)"></app-doc-info>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

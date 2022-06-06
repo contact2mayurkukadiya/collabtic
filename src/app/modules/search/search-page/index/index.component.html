@@ -1,0 +1,132 @@
+<div id="header" *ngIf="!msTeamAccess">
+  <app-product-header *ngIf="!headerFlag" [pageData]="headerData" (search)="applySearch('emit', $event)">
+  </app-product-header>
+  <app-product-header *ngIf="headerFlag" [pageData]="headerData" (search)="applySearch('emit', $event)">
+  </app-product-header>
+</div>
+<div class="main-section main-section-search">
+  <div class="search-col" *ngIf="teamSystem" [ngClass]="{'search-div-msm' : msTeamAccess}">
+    <span *ngIf="msTeamAccess" class="cursor team-back-icon team-back-icon-msm" (click)="backPage()">
+      <span class="text-thread-title">
+        <span>Search</span>
+      </span>
+    </span>
+    <span *ngIf="searchFlag" class="search-div"
+      [ngClass]="{'search-filter search-btn' : searchClose || searchTick, 'search-bg': searchBgFlag, 'search-div-ms' : msTeamAccess}">
+      <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+        <a *ngIf="!searchTick && !searchClose" class="search-icon">
+          <img alt="Search" src="{{assetPath}}/search-icon.png"></a>
+        <input type="text" class="form-control search-control" [(ngModel)]="searchVal" id="searchKey"
+          formControlName="searchKey" maxlength="50" [readonly]="searchReadonlyFlag" placeholder="{{searchPlacehoder}}"
+          (input)="onSearchChange($event.target.value)">
+        <a *ngIf="searchClose" class="search-actions search-close" (click)="clearSearch()">
+          <img alt="Search Close" src="{{searchCloseImg}}"></a>
+        <a *ngIf="searchTick" class="search-actions search-tick" (click)="submitSearch()">
+          <img alt="Search" src="{{searchImg}}"></a>
+      </form>
+    </span>
+  </div>
+  <div class="search-section">
+    <div class="container-fluid">
+      <div class="row col-lg-12 col-md-12 col-sm-12 landing-padding0 landing-margin0">
+        <!-- -->
+        <!--<div class="text-thread-title">
+                        <span>
+                            <img class="thread-img" src="assets/images/landing-page/thread-normal.png">
+                        </span><span>Threads</span>
+                    </div>-->
+        <div *ngIf="!msTeamAccess"
+          class="threads-page-filter col col-lg-2  col-md-2 col-xl-2 col-sm-2 padding-right-class">
+          <div class="cbt-filter thread-filter"
+            [ngClass]="{'filter-expand': expandFlag, 'filter-collapse': !expandFlag}">
+            <app-filter *ngIf="filterLoading" [pageDataInfo]="pageData" (toggle)="expandAction($event)"
+              [filterOptions]="filterOptions" (filterAction)="applyFilter($event)"></app-filter>
+            <app-filter *ngIf="!filterLoading" [pageDataInfo]="pageData" (toggle)="expandAction($event)"
+              [filterOptions]="filterOptions" (filterAction)="applyFilter($event)"></app-filter>
+          </div>
+        </div>
+        <div class="center-middle-width-container col"
+          [ngClass]="{'col-lg-10 col-md-10 col-xl-10 col-sm-10' :  ((!rightPanel || emptyFlag ) && !msTeamAccess) , 'col-lg-12 col-md-12 col-xl-12 col-sm-12' : (msTeamAccess), 'col-lg-8 col-md-8 col-xl-8 col-sm-8' : (!msTeamAccess) }">
+          <div class="center-middle-width padding-common workstream-center-width search-middle-width">
+            <div *ngIf="showSearchRes && !msTeamAccess" class="workstream-page-center-menu" align="left">
+              <div class="workstream-page-center-menu-inner">
+                <div class="inline-class" (click)="taponContent(contentType.contentTypeId)"
+                  *ngFor="let contentType of getcontentTypesArr; let ct=index">
+                  <span class="workstream-content-count"
+                    *ngIf="outputContentTypedata && outputContentTypedata[ct] && outputContentTypedata[ct].isNew">
+                    <span
+                      *ngIf="outputContentTypedata[ct]?.catCount < 100">{{outputContentTypedata[ct]?.catCount}}</span>
+                    <span *ngIf="outputContentTypedata[ct]?.catCount > 100">99+</span>
+                  </span>
+                  <div>
+                    <!-- <img [ngClass]="{'active ': contentType.contentTypeId == currentContentTypeId}"
+                      class="contenttype-img contentTypeId{{contentType.contentTypeId}} img-contenttype img-contenttype{{contentType.contentTypeId}} {{contentType.submenuimageClass}}"
+                      [src]="contentType.contentTypeId == currentContentTypeId ? 'assets/images/workstreams-page/'+contentType.urlActivePath : 'assets/images/workstreams-page/'+contentType.urlPath"> -->
+                    <span [ngClass]="{'active': contentType.contentTypeId == currentContentTypeId}">
+                      <img
+                        class="contenttype-img contentTypeId{{contentType.contentTypeId}} img-contenttype img-contenttype{{contentType.contentTypeId}} {{contentType.submenuimageClass}}"
+                        [src]="'assets/images/workstreams-page/'+contentType.urlPath" onload="SVGInject(this)">
+                    </span>
+                  </div>
+                  <div title="{{contentType.name}}" class="content-type-title"> {{contentType.name}}
+                  </div>
+                  <div [ngClass]="{'active ': contentType.contentTypeId == currentContentTypeId}"
+                    class="bottom-border border-contenttype border-contenttype{{contentType.contentTypeId}} ">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="currentContentTypeId == 2 && showSearchRes">
+              <app-threads-page [pageDataInfo]="pageData" [parentData]="workstreamId" [fromSearchPage]="fromSearchPage"
+                [fromOthersTab]="comefromOthersTab">
+              </app-threads-page>
+            </div>
+            <div *ngIf="currentContentTypeId == 11 && showSearchRes" class="parts-thumb-view">
+              <app-parts-list [fromSearchpage]="partData"></app-parts-list>
+            </div>
+            <div *ngIf="currentContentTypeId == 7 && showSearchRes">
+              <app-knowledge-articles [pageDataInfo]="kaData" [fromSearchPage]="fromSearchPage">
+              </app-knowledge-articles>
+            </div>
+            <div *ngIf="currentContentTypeId == 28 && showSearchRes" class="parts-thumb-view">
+              <app-knowledge-base-list [fromSearchpage]="kbData"></app-knowledge-base-list>
+            </div>
+            <div *ngIf="currentContentTypeId == 4 && showSearchRes">
+              <!--<div class="documents-grid-row ps" style="padding-top: 0px !important;position: relative;max-height: 610px;"
+                                [perfectScrollbar]="sconfig" (scroll)="onScroll($event)">
+                                <app-files [items]="files" [thumbView]="thumbView"></app-files></div-->
+              <app-documents [accessFrom]="pageAccess"></app-documents>
+            </div>
+            <div *ngIf="currentContentTypeId == 16 && showSearchRes">
+              <app-sib-list [fromSearchpage]="sibData"></app-sib-list>
+            </div>
+            <div>
+              <app-recent-searches-widgets (search)="applySearch('emit', $event)" *ngIf="!showSearchRes"
+                [fromSearchPage]="fromSearchPage"></app-recent-searches-widgets>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!msTeamAccess" class="right-middle-width-container landing-padding0 col padding-right-class"
+          [ngClass]="{'col-lg-2 col-md-2 col-xl-2 col-sm-2' : currentContentTypeId == 4 && (rightPanel && !emptyFlag)}">
+          <div class="right-width-column padding-common">
+            <!--
+<div *ngIf="currentContentTypeId != 4">
+                                        <app-domain-members ></app-domain-members>
+                                    </div>
+                                 -->
+            <div *ngIf="currentContentTypeId == 4">
+              <div class="cust-right-panel ws-doc-info-panel info-panel media-info media-info-search"
+                [style.height.px]="innerHeight+110"
+                [ngClass]="{'right-panel-expand': rightPanel, 'right-panel-collapse': !rightPanel || emptyFlag}">
+                <span *ngIf="!rightPanel && !emptyFlag" class="expand-icon cursor"
+                  (click)="toggleInfo(rightPanel)"></span>
+                <app-doc-info class="landing-doc-info" [ngClass]="{'hide': (!rightPanel && !emptyFlag) || emptyFlag}"
+                  (toggleAction)="toggleAction($event)"></app-doc-info>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,45 @@
+.notificationToggle, .mustReadToggle{
+    &.field-item{
+        .field-box{
+            margin:0 !important;
+            max-width: 100%;
+            flex: 100%;
+            .toggle-col{
+                &.field-label{
+                    font-family: "Roboto-Regular";
+                    font-size: 15px;
+                    float: initial;                        
+                    width: auto;
+                    padding: 0;    
+                    color: #62779f;
+                }
+                &.toggle-option{
+                    padding: 0 10px 0 0px;                        
+                    float: left;                                          
+                    width: 65px;
+                }
+            }
+        }
+    }   
+}
+  /** Perfect Scrollbar */
+  ::ng-deep body .ps {
+    &.ps--active-y { 
+      .ps__rail-y {       
+        z-index: 100;        
+      }
+    }
+  }
+  ::ng-deep {
+    .ck.ck-editor__main > .ck-editor__editable {
+      min-height: 150px !important;
+      border-bottom-right-radius: 8px !important;
+      border-bottom-left-radius: 8px !important;
+    }
+  
+    .ck-rounded-corners .ck.ck-editor__top .ck-sticky-panel .ck-toolbar,
+    .ck.ck-editor__top .ck-sticky-panel .ck-toolbar.ck-rounded-corners {
+      border-top-left-radius: 8px !important;
+      border-top-right-radius: 8px !important;
+    }
+  }

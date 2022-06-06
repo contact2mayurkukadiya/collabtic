@@ -1,0 +1,190 @@
+<div class="head-row head-brand"
+  [ngClass]="{'hide': access == 'manageThread' || access == 'managePart' || access == 'manageSib' || access == 'manageKnowledgearticles'}">
+  <div class="push-msg" *ngIf="!isIncognitoBrowser && (definedNotifyText || enableDesktopPush)">
+    <div class="push-enablepopup text-center">
+      <div *ngIf="!definedNotifyText && enableDesktopPush">
+        <span><img style="margin-right: 4px" src="assets/images/landing-page/notify-normalone.png" /></span>
+        Please
+        <span class="hilight-text cursor" (click)="notifyPopupScreen('top-left')">Turn ON Notifications</span>
+        to stay informed about your {{ platformName }} activity
+      </div>
+      <div *ngIf="definedNotifyText">
+        <span><img style="margin-right: 4px" src="assets/images/landing-page/notify-normalone.png" /></span>
+        Please
+        <span class="hilight-text cursor" (click)="notifyPopupScreen('top-left')">Turn ON Notifications</span>
+        to stay informed about your {{ platformName }} activity
+      </div>
+      <!--div *ngIf="!definedNotifyText && enableDesktopPush">
+        <span><img style="margin-right: 4px" src="assets/images/landing-page/notify-normalone.png" /></span>
+        Please
+        <span class="hilight-text cursor" (click)="notifyMe()">Turn ON Notifications</span>
+        to stay informed about your {{ platformName }} activity
+      </div>
+      <div *ngIf="definedNotifyText">
+        <img style="margin-right: 4px" src="assets/images/landing-page/notify-block.png" />
+        Notifications blocked.
+        <span class="hilight-text cursor" (click)="notifyPopupScreen('top-left')">View option</span>
+        to enable your notification
+      </div-->
+    </div>
+  </div>
+</div>
+<div *ngIf="showItemheader" class="prob-header d-flex align-items-center justify-content-between flex-wrap">
+  <div class="head-row head-brand">
+    <div style="cursor: pointer !important" title="Home page"  class="cursor head-col logo"
+      [ngClass]="{'businessLogo':collabticDomain,'lordstown-logo': domainId == 94, logoTop: showCountryFlag, 'tvs-logo': tvslogoHeight}">
+      <img (click)="taponlogo()" src="{{ platformLogo }}" class="b-logo" alt="Logo" *ngIf="(loadLogo)" />
+      <img (click)="taponlogo()" src="{{ assetPathplatform }}/cba-car-logo.png" *ngIf="loadLogo && platformId==platFormTypes.CbaForum"
+        class="cba-car-logo" alt="Logo" />
+      <span class="head-col country-name-text" *ngIf="showCountryFlag"><span
+          class="country-name-in-text">{{countryName}}</span></span>
+      <span *ngIf="collabticDomain && roleId == 3" title="Edit Logo" (click)="changeBusinessLogo()" class="logoediticon logoedit"><img src="assets/images/profile/sname-edit-icon.png"></span>
+    </div>
+    
+    <div *ngIf="welcomeProfileFlag" class="head-col welcome-text hide">
+      Good Morning {{ apiUrl.userName }}!
+    </div>
+    <div *ngIf="headTitleFlag" class="head-col head-title text-right" [innerHTML]="headTitle"></div>
+  </div>
+
+  <!-- <div class="col-sm-12 head-row head-brand"
+    [ngClass]="{ 'col-lg-5 col-md-5' : !recentVinFlag , 'col-lg-4 col-md-4' : recentVinFlag , 'hide' : access == 'manageThread' || access == 'managePart' || access == 'manageSib' || access == 'manageKnowledgearticles' }">
+  </div>
+ -->
+  <div class="col-lg-5 col-md-5 col-sm-12 head-row head-prof"
+    [ngClass]="{ 'col-lg-10 col-md-10 search-width': access == 'search', 
+      'col-lg-6 col-md-6': access == 'manageThread' || access == 'managePart' || access == 'manageSib' || access == 'manageKnowledgearticles' || recentVinFlag }">
+    <div *ngIf="recentVinFlag" class="head-col vin-col">
+      <div class="vin-div" title="Recent VINs" (click)="recentVins()">
+        <img src="assets/images/landing-VIN.png">
+        <span class="vin-text">VIN</span>
+      </div>
+    </div>
+    <div class="head-col search-col">
+      <span *ngIf="searchFlag" class="search-div"
+        [ngClass]="{ 'search-filter search-btn': searchClose || searchTick, 'search-bg': searchBgFlag }">
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+          <a *ngIf="!searchTick && !searchClose" class="search-icon">
+            <!-- <img alt="Search" src="{{ assetPath }}/search-icon.png" /> -->
+            <img alt="Search" src="{{ assetPath }}/search-ic-header.svg" onload="SVGInject(this)" />
+          </a>
+          <input autofocus type="text" (click)="taponsearch($event)" class="form-control search-control"
+            [(ngModel)]="searchVal" id="searchKey" formControlName="searchKey" maxlength="50"
+            [readonly]="searchReadonlyFlag" placeholder="{{ searchPlacehoder }}"
+            (input)="onSearchChange($event.target.value)"
+            [ngClass]="{ 'is-invalid': submitted && f.searchKey.errors }" />
+          <!--div *ngIf="submitted && f.searchKey.errors" class="invalid-feedback page-error-text">
+                        <div *ngIf="f.searchKey.errors.required">Please enter search keyword</div>
+                    </div-->
+          <a *ngIf="searchClose" class="search-actions search-close" (click)="clearSearch()">
+            <img alt="Search Close" src="{{assetPath}}/close-icon.svg" onload="SVGInject(this)" /></a>
+          <a *ngIf="searchTick" class="search-actions search-tick" (click)="submitSearch()">
+            <img alt="Search" src="{{assetPath}}/search-ic-header.svg" onload="SVGInject(this)" /></a>
+        </form>
+      </span>
+      <!-- <span class="notification-class-icon-header {{ notification.totalunseenunreadcolor }}"
+        [matBadgeHidden]="notification.totalNotificationcount < 0"
+        matBadge="{{ notification.totalNotificationcount }}">
+        <span (click)="tapnotifications()" class="notification-header-icon">
+          <img src="assets/images/landing-page/landing-notifications.svg" onload="SVGInject(this)" />
+        </span>
+      </span> -->
+      <span class="notification-class-icon-header {{ notification.totalunseenunreadcolor }}"
+        [matBadgeHidden]="getTotalCount < 1"
+        matBadge="{{ getTotalCount }}">
+        <span (click)="tapnotifications()" class="notification-header-icon">
+          <img src="assets/images/landing-page/landing-notifications.svg" onload="SVGInject(this)" />
+        </span>
+      </span>
+      <span class="search-close" *ngIf="access == 'search'">
+        <a title="Close" (click)="closeWindowHeader()">
+          <img src="assets/images/thread-detail/thread-window-close.svg" alt="Close" onload="SVGInject(this)">
+        </a>
+      </span>
+    </div>
+    <div title="{{ apiUrl.userName }}" *ngIf="profileFlag" class="head-col text-center profile"
+      [ngbTooltip]="tipContent" tooltipClass="header-tooltip-content">
+      <span class="profile-img">
+        <span class="rounded-circle" id="profile_pic"
+          [style.background-image]="'url(' + apiUrl.profileImage + ')'"></span>
+      </span>
+      <span class="prof-name">{{ apiUrl.userName }}</span>
+    </div>
+    <ng-template #tipContent>
+      <div class="tooltip-content">
+        <ul>
+          <li>
+            <a *ngIf="showLanguageFlag && domainId != 52" (click)="selectLanguage()">
+              <span class="pro_image">
+                <img src="assets/images/lang-icon-gray.png" />
+              </span>
+              <span class="pro_text">{{ languageName }}</span>
+            </a>
+          </li>
+          <li>
+            <a (click)="tapfrompopup(1)">
+              <span class="pro_image">
+                <img src="assets/images/user_profile_pro_icon.png" />
+              </span>
+              <span class="pro_text">Profile</span>
+            </a>
+          </li>
+          <!--li *ngIf="dropdownAccess"><a (click)="tapfrompopup(2)" ><span class="pro_image"><img src="assets/images/configure_notification_pro_icon.png"></span><span class="pro_text">Configure Notifications</span></a></li-->
+          <li *ngIf="domainId!='165'">
+            <a (click)="changePassword()">
+              <span class="pro_image">
+                <img src="assets/images/change_password_pro_icon.png" />
+              </span>
+              <span class="pro_text">Change Password</span>
+            </a>
+          </li>
+          <!--li *ngIf="dropdownAccess"><a (click)="tapfrompopup(3)" ><span class="pro_image"><img src="assets/images/dashboard_pro_icon.png"></span><span class="pro_text" style="top: 2px;">Dashboard</span></a></li-->
+          <li>
+            <a (click)="logout()" class="logout">
+              <span class="pro_image">
+                <img src="assets/images/logout_pro_icon.png" />
+              </span>
+              <span class="pro_text">Logout</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<app-dialog-popup *ngIf="displayLogoutPopup" [dialogData]="dialogData" (closewindow)="closewindowPopup($event)">
+</app-dialog-popup>
+<!--p-dialog [header]="false" [(visible)]="displayLogoutPopup" [modal]="true" styleClass="p-fluid logoutPopup-prime"
+  [style]="{ width: '50vw' }">
+  <div class="row col-lg-12 col-md-12 col-sm-12 logout-dialog-main-container">
+    <div class="col col-lg-5 col-md-5 col-sm-5" style="
+        background-color: #332b3f;
+        height: 300px;
+        position: relative;
+        padding: 0px;
+      ">
+      <div class="vertical-center">
+        <img src="assets/images/landing-page/logout-dialog-icon.png" />
+      </div>
+    </div>
+    <div class="col col-lg-7 col-md-7 col-sm-7" style="background-color: #fff; height: 300px">
+      <div class="logout-right-container">
+        <div class="inner-border-container vertical-center">
+          <div class="right-side-text-container">
+            You are logged out of {{ platformName }}
+          </div>
+          <div (click)="closewindowPopup()" class="btn-logout-output">OK</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog-->
+
+<p-dialog [header]="false" [(visible)]="displayPosition" [position]="position"
+  styleClass="p-fluid notification-blocked-prime" [modal]="true" [baseZIndex]="10000" [draggable]="false"
+  [resizable]="false">
+  <img class="close-icon cursor" (click)="displayPosition = false"
+    src="assets/images/landing-page/close-icon-blocker2.png" />
+  <img style="object-fit: cover; width: 100%" src="assets/images/landing-page/notification-block-info.png" />
+</p-dialog>

@@ -1,0 +1,20 @@
+.media-info-search
+{
+    &.right-panel-collapse{
+        .expand-icon{
+            right: 6px;
+            position: relative;
+        }
+    }
+    
+}
+::ng-deep body{
+    &.top-right-notifications-popup{
+        &.search-page{
+            .modal-dialog{
+                margin-right: 75px !important;
+                margin-top: 65px !important;
+            }
+        }        
+    }
+} 

@@ -1,0 +1,95 @@
+<div id="header">
+    <app-product-header *ngIf="!headerFlag" [pageData]="headerData" (search)="applySearch('emit', $event)">
+    </app-product-header>
+    <app-product-header *ngIf="headerFlag" [pageData]="headerData" (search)="applySearch('emit', $event)">
+    </app-product-header>
+</div>
+<div class="left-section hide">
+    <div class="first-left-width">
+        <nav id="nav-sidebar">
+            <app-sidebar [pageData]="sidebarActiveClass" accessModule="{{bodyClass}}"></app-sidebar>
+        </nav>
+    </div>
+</div>
+<div class="prob-index split-sec1">
+    <div class="container-fluid">
+        <div class="row col-lg-12 col-md-12 col-sm-12 landing-padding0 landing-margin0">
+            <!-- -->
+            <div class="threads-page-filter col col-lg-2  col-md-2 col-xl-2 col-sm-2 padding-right-class">
+                <div class="text-thread-title">
+                    <span class="thread-img knowledge-ic">
+                        <img src="assets/images/knowledge_article_heading.svg" onload="SVGInject(this)">
+                    </span>
+                    <span *ngIf="!msTeamAccess" class="knowledge_article__heading">Knowledge Article</span>
+                    <span *ngIf="msTeamAccess" class="knowledge_article__heading"
+                        tooltipClass="help-content-tooltip sidebarTeam" container="body" triggers="manual"
+                        [autoClose]="false" placement="right-top" [ngbTooltip]="articlesTT"
+                        #ttarticles="ngbTooltip">Knowledge Article</span>
+                    <ng-template #articlesTT>
+                        <div class="tt-helpcontent-container">
+                            <div class="tt-bg-image {{thelpContentIconName}}"></div>
+                            <div class="tt-title">
+                                <div class="lt-img {{thelpContentIconName}}"></div>
+                                <div class="rt-text">{{thelpContentTitle}}</div>
+                            </div>
+                            <div class="tt-desp">{{thelpContentContent}}</div>
+                            <div class="tt-next-text" (click)="helpContent(thelpContentId)">DONE</div>
+                        </div>
+                    </ng-template>
+                </div>
+                <div class="cbt-filter thread-filter"
+                    [ngClass]="{'filter-expand': expandFlag, 'filter-collapse': !expandFlag}">
+                    <app-filter *ngIf="filterLoading" (toggle)="expandAction($event)" [filterOptions]="filterOptions"
+                        (filterAction)="applyFilter($event)"></app-filter>
+                    <app-filter *ngIf="!filterLoading" (toggle)="expandAction($event)" [filterOptions]="filterOptions"
+                        (filterAction)="applyFilter($event)"></app-filter>
+                </div>
+            </div>
+            <div class="center-middle-width-container col col-lg-8   col-md-8 col-xl-8 col-sm-8">
+                <div class="center-middle-width padding-common">
+                    <div class="thread-top-section">
+                        <div class="thread-top-left">
+                            <div class="cursor thread-add-new" (click)="navPart()">
+                                <span><i style="font-size: 13px;margin-right: 4px;"
+                                        class="pi pi-plus"></i></span><span>New Knowledge Article</span>
+                            </div>
+                            <div class="thread-sort-option">
+                                <!-- <p-dropdown class="select-thread-sort"  appendTo="body" [options]="threadSortOptions" [(ngModel)]="selectedCity1" placeholder="" optionLabel="name" (onChange)="selectEventSort($event)" ></p-dropdown>
+                           </div> 
+                           <div  class="thread-order-option">
+                            <p-dropdown class="select-thread-order"  appendTo="body" [options]="threadOrderOptions" [(ngModel)]="selectedCity2" placeholder="" optionLabel="name" (onChange)="selectEventOrder($event)" ></p-dropdown>
+                           </div>  -->
+                            </div>
+                            <div class="thread-top-right">
+                                <!--app-common-notifications *ngIf="msTeamAccess"></app-common-notifications-->
+                                <div (click)="taponpin()" class="icon-right cursor">
+                                    <img *ngIf="!yourpined" src="assets/images/pin-icon-normal.png">
+                                    <img *ngIf="yourpined" src="assets/images/pin-icon-active.png">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear">
+                        </div>
+                        <div>
+                            <app-knowledge-articles [pageDataInfo]="pageData" [filterOptions]="filterOptions"
+                                (toggle)="expandAction($event)" (filterOutput)="filterOutput($event)">
+                            </app-knowledge-articles>
+                            <!-- <app-threads-page  [pageDataInfo]="pageData" [filterOptions]="filterOptions" (toggle)="expandAction($event)" (filterOutput)="filterOutput($event)"></app-threads-page> -->
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="right-middle-width-container landing-padding0  col col-lg-2  col-md-2 col-xl-2 col-sm-2 padding-right-class"
+                [ngClass]="{'right-collapse':!rightPanel}">
+                <div class="right-width-column padding-common">
+                    <app-domain-members></app-domain-members>
+                </div>
+            </div>
+            <!-- <div class="cust-right-panel" [ngClass]="{'right-panel-expand': rightPanel, 'right-panel-collapse': !rightPanel}">
+                    <app-domain-members></app-domain-members>
+                </div> -->
+        </div>
+    </div>
+</div>

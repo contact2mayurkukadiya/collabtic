@@ -1,0 +1,43 @@
+
+ .escaltion-email-more{
+    display:inline-block;
+    border: 1px solid #e55554;
+    width: 33px;
+    height: 33px;
+    margin: 3px 0 0 0;
+    padding: 0;
+    border-radius: 50%;
+    position: relative;
+    text-align: center;
+    vertical-align: top;
+    cursor: pointer;
+    .escalation-count-text{
+        font-family: "Roboto-Regular";
+        color: #e55554;
+        font-size: 14px;
+        margin-top: 4px;
+        display: block;
+    }
+}
+
+::ng-deep .text-extend:hover {
+  text-overflow: unset !important;
+}
+
+::ng-deep .p-datatable-scrollable-wrapper .p-datatable-scrollable-view {
+  &:first-child {
+    table:first-child {
+      th:first-child {
+        border-top-left-radius: 10px;
+      }
+    }
+  }
+  &:last-child {
+    table:first-child {
+      th:last-child {
+        border-top-right-radius: 10px;
+      }
+    }
+  }
+}
+

@@ -1,0 +1,31 @@
+<div class="system-info">
+    <div *ngIf="headerFlag" class="head">System Information</div>
+    
+    <div class="update-info">
+        <div class="update-col">
+            <span class="user-col row-1">Created By</span>
+            <span class="row-2">{{userInfo.createdBy}}</span>
+        </div>
+        <div class="update-col">
+            <span class="date-col row-1">Created On</span>
+            <span class="row-2">{{userInfo.createdOn}}</span>
+        </div>
+        <div class="update-col">
+            <span class="user-col row-1">Modified By</span>
+            <span class="row-2" *ngIf="userInfo.updatedBy">{{userInfo.updatedBy}}</span>
+            <span class="row-2" *ngIf="!userInfo.updatedBy">-</span>
+        </div>
+        <div class="update-col">
+            <span class="date-col row-1">Modified On</span>
+            <span class="row-2" *ngIf="userInfo.updatedOn">{{userInfo.updatedOn}}</span>
+            <span class="row-2" *ngIf="!userInfo.updatedOn">-</span>
+        </div>
+    </div>
+    <div class="tag-info ws-info">
+        <div class="tags ws">
+            <span class="list-txt ws-txt"></span>
+            <span class="tag-list ws-list" *ngFor="let item of workstreams">{{item.name}}</span>
+        </div>
+    </div>
+    
+</div>

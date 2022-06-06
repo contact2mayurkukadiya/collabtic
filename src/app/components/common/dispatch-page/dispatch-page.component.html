@@ -1,0 +1,530 @@
+<div class="row justify-content-center" cdkDropListGroup *ngIf="!loadingDispatch">
+    <div *ngFor="let cardData of serviceList;let imdexOfElement = index" class="col"
+        style="padding-left: 10px;padding-right: 10px;">
+        <p-card class="parts-card cursor parts-expand-card dispatch-card"
+            [ngClass]="{'today-background' : cardData.date == today }">
+            <ng-template pTemplate="header">
+                <div class="view-header" style="padding-top: 10px;">
+                    <div class="row m-0" style="align-items: center;justify-content: center;">
+                        <span class="text-center">{{(cardData.display_date | date : 'EEE, MMMM
+                            dd').toUpperCase()}}</span>
+                        <span class="text-center ml-1" *ngIf="cardData.date == today">(TODAY)</span>
+                        <span (click)="displayModel(cardData.date,'add');" style="position: absolute;right: 10%;">
+                            <img src="assets/images/dispatch/plus_i_svg.svg" onload="SVGInject(this)" alt="plus" />
+                        </span>
+                    </div>
+                    <hr class="solid">
+                </div>
+            </ng-template>
+            <div class="div-scrollable example-list">
+                <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="cardData.body"
+                    (cdkDropListDropped)="drop($event)" style="min-height: 100%;">
+                    <div class="div-card-body" cdkDrag *ngFor="let item of cardData.body;let indexOfelement = index">
+                        <div class="card-div" (click)="openDetails(item.serviceId)"
+                            [ngStyle]="{'background-image': 'url(assets/images/dispatch/svg/service_card_bg.svg)','background-color' : item.statusData.statusColor}">
+                            <div class="parts-image d-flex"
+                                style="margin-bottom: 3px;align-items: center;justify-content: space-between;">
+                                <div class="d-flex" style="align-items: center;">
+                                    <img src="assets/images/dispatch/svg/service-card/v_i_service.svg"
+                                        onload="SVGInject(this)" class="svg-service">
+                                    <span style="font-weight: bold;font-size: 15px;" class="truncate">
+                                        {{item.shopData.name}}
+                                    </span>
+                                </div>
+                                <span *ngIf="item.statusData.statusClass == 'new'" style="float: right;display: flex;">
+                                    <span (click)="$event.stopPropagation();editServiceData(item,'edit',cardData.date);">
+                                        <img src="assets/images/dispatch/svg/service-card/h_edit_i.svg"
+                                            onload="SVGInject(this)" style="margin-right: 2px;">
+                                    </span>
+                                    <span (click)="$event.stopPropagation();displayNotesData(cardData.display_date,item);"
+                                        *ngIf="item.notes">
+                                        <img src="assets/images/dispatch/svg/service-card/h_notes_i.svg"
+                                            onload="SVGInject(this)" style="margin-left: 2px;">
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="part-cont">
+                                <div class="app-info">
+                                    <div class="title-2 d-flex" style="margin-bottom: 3px;align-items: center;">
+                                        <img src="assets/images/dispatch/svg/service-card/v_i_clock.svg"
+                                            onload="SVGInject(this)" class="svg-service">
+                                        <span style="font-size: 13px;" class="truncate">
+                                            {{item.serviceTime}}
+                                        </span>
+                                    </div>
+                                    <div class="title-2 d-flex" style="margin-bottom: 3px;align-items: center;">
+                                        <img src="assets/images/dispatch/svg/service-card/v_i_model.svg"
+                                            onload="SVGInject(this)" class="svg-service">
+                                        <span style="font-size: 14px;" class="truncate" *ngIf="item.make">
+                                            {{item.make}} <i class="pi pi-angle-right"
+                                                style="vertical-align: middle;"></i>
+                                            {{item.model}} <i class="pi pi-angle-right"
+                                                style="vertical-align: middle;"></i>
+                                            {{item.year}}
+                                        </span>
+                                    </div>
+                                    <div class="title-2 d-flex" style="margin-bottom: 3px;align-items: center;">
+                                        <img src="assets/images/dispatch/svg/service-card/v_i_vin.svg"
+                                            onload="SVGInject(this)" style="width: 18px;height: 15px;">
+                                        <span style="font-size: 14px;" class="truncate">
+                                            {{item.vin}}</span>
+                                    </div>
+                                    <div class="parts-action parts-pin title-2 d-flex"
+                                        style="align-items: center;justify-content: space-between;">
+                                        <div class="d-flex" style="align-items: center;">
+                                            <img src="assets/images/dispatch/svg/service-card/v_i_ro_no.svg"
+                                                onload="SVGInject(this)" style="width: 19px;height: 19px;">
+                                            <span style="font-size: 13px;" class="truncate">
+                                                RO# {{item.repairOrder}}</span>
+                                        </div>
+                                        <div>
+                                            <button pButton pRipple type="button"
+                                                class="p-button-outlined p-button-rounded p-button-warning outlined-btn"
+                                                style="float: right;" disabled>
+                                                <img src="assets/images/dispatch/svg/service-card/{{item.statusData.statusClass}}.svg"
+                                                    alt="star" />
+                                                <label style="margin: 0 0 0 2px;">{{item.statusData.name}}</label>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-div" style="align-items: center;">
+                            <span style="font-size: 12px;" *ngIf="item.techInfo.techName">
+                                <p-button styleClass="p-button-text avatar-btn">
+                                    <img alt="logo" src="assets/images/dispatch/avatar.jpg"
+                                        style="width: 24px;height: 24px;border-radius: 50%;" />
+                                    <span class="font-bold truncate"
+                                        style="color: #333333;margin-left: 0.25rem;">{{item.techInfo.techName}}</span>
+                                    <img style="margin-left: 0.25rem;"
+                                        src="assets/images/dispatch/svg/service-card/trigger.svg" />
+                                </p-button>
+                            </span>
+                            <span class="truncate" style="color: red;font-size: 13px;"
+                                (click)="openDetails(item.serviceId);">View Detail
+                                <i class="pi pi-angle-double-right"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- </ng-container> -->
+            </div>
+        </p-card>
+    </div>
+</div>
+<p-dialog [(visible)]="displayModal" [modal]="true" [draggable]="false" [resizable]="true"
+    class="dispatch-modal card-spacing">
+    <ng-template pTemplate="header">
+        <div class="w-100 mx-3" style="display: flex;align-items: center;justify-content: space-between;">
+            <span style="font-size: 18px;font-weight: 500;">New Service Request</span>
+            <button pButton pRipple type="button" icon="pi pi-save" iconPos="right" label="Save"
+                class="p-button-rounded p-button-danger float-right" (click)="saveService(modalState)"></button>
+            <!-- [disabled]="serviceForm.invalid" -->
+        </div>
+    </ng-template>
+    <form [formGroup]="serviceForm">
+        <div class="row my-3">
+            <div class="col-6">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/shop_i.svg" alt="shop"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Shop</span>
+                    </label>
+                    <span style="color: #b2b2b2;font-style: italic;float: right;">Required</span>
+                </div>
+                <div>
+                    <p-dropdown [options]="Shops" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true"
+                        placeholder="Select a Shop" class="col-6" (onChange)="shopChanged($event)" optionValue="id"
+                        formControlName="shopId">
+                        <ng-template pTemplate="selectedItem">
+                            <div class="shop-item shop-item-value" *ngIf="selectedShop">
+                                <div>{{selectedShop.name}}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-shop pTemplate="item">
+                            <div class="shop-item" *ngIf="shop.value == 0">
+                                <div><span style="color: red;">{{shop.label}}</span></div>
+                            </div>
+                            <hr *ngIf="shop.value == 0">
+                            <div class="shop-item" *ngIf="!shop.value">
+                                <div>{{shop.name}}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="invisible">
+                    <label>
+                        <!-- <img src="assets/images/dispatch/svg/service-form/shop_i.svg" alt="shop"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" /> -->
+                        <span style="color: #9b9a9a;">Required</span>
+                    </label>
+                </div>
+                <div>
+                    <span class="p-input-icon-left w-100" style="align-items: center;">
+                        <img src="assets/images/dispatch/svg/service-form/map.svg" alt="map" onload="SVGInject(this)"
+                            style="position: absolute;margin: 10px;" />
+                        <input type="text" pInputText style="background-color: #f1f4fb;" class="input-bg"
+                            placeholder="Ms Alice Smith Apartment 1c 213 Derrick Street Boston, MA 02130 .."
+                            formControlName="mapValue" />
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-6">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/date_i.svg" alt="date"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Date</span>
+                    </label>
+                    <span style="color: #b2b2b2;font-style: italic;float: right;">Required</span>
+                </div>
+                <div>
+                    <p-calendar id="date_picker" formControlName="serviceDate" [showIcon]="true" inputId="icon">
+                    </p-calendar>
+                </div>
+            </div>
+            <div class="col-6">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/clock_i.svg" alt="time"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Time</span>
+                    </label>
+                    <span style="color: #b2b2b2;font-style: italic;float: right;">Required</span>
+                </div>
+                <div class="d-flex" style="justify-content: space-between;">
+                    <p-calendar id="time_picker" formControlName="serviceTime" [timeOnly]="true"
+                        [disabled]="serviceForm.value?.any_time" class="time-dd"></p-calendar>
+                    <!-- <p-dropdown [options]="Time" formControlName="serviceTime" placeholder="Select" class="time-dd"
+                        [virtualScroll]="false" [itemSize]="2" [filter]="true" [disabled]="serviceForm.value?.any_time">
+                    </p-dropdown> -->
+                    <p-dropdown [options]="meridiem" formControlName="selectedMeridiem" placeholder="Select"
+                        optionValue="value" [virtualScroll]="false" [itemSize]="2" [filter]="true"
+                        [disabled]="serviceForm.value?.any_time">
+                    </p-dropdown>
+                    <span
+                        style="margin-right: 20px;margin-left: 20px; margin-top: 2%;color: #000 !important;">(OR)</span>
+                    <p-checkbox id="anyTime_checkbox" formControlName="any_time" [binary]="true" inputId="binary"
+                        label="Any Time">
+                    </p-checkbox>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-4">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/repair_i.svg" alt="repair order#"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Repair Order#</span>
+                    </label>
+                </div>
+                <div>
+                    <input type="text" pInputText formControlName="repairOrder" class="input-bg"
+                        placeholder="Enter Repair Order#">
+                </div>
+            </div>
+            <div class="col-4">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/technician_i.svg" alt="technician"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Technician</span>
+                    </label>
+                </div>
+                <div>
+                    <p-dropdown [options]="Technician" optionLabel="userName" formControlName="technicianId"
+                        optionValue="userId" placeholder="Select" [virtualScroll]="true" [itemSize]="5" [filter]="true">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="col-4">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/status_i.svg" alt="status"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Status</span>
+                    </label>
+                </div>
+                <div>
+                    <p-dropdown [options]="Status" optionLabel="name" formControlName="statusId" optionValue="id"
+                        placeholder="Select" [virtualScroll]="false" [itemSize]="2" [filter]="true"></p-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-12">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/vin_title_i.svg" alt="vin"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">VIN</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <div class="col-12 pr-1 d-flex">
+                        <div class="p-inputgroup mr-2">
+                            <input type="text" pInputText formControlName="vin" class="input-bg" (change)="vinChanged()"
+                                placeholder="Enter VIN">
+                            <button type="button" pButton pRipple icon="pi pi-check" (click)="setVINValues()"
+                                [disabled]="!vinIsValid" class="p-button-secondary vin-check-btn"></button>
+                            <!-- [ngClass]="{'p-button-success' : serviceForm.get('vin').valid}" -->
+                        </div>
+                        <button pButton pRipple type="button" class="p-button-outlined p-button-rounded vin-btn"
+                            disabled>
+                            <!-- this.miSpecialForm.get('miName').valid -->
+                            <img src="assets/images/dispatch/svg/service-form/vin_i.svg" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-4">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/make_i.svg" alt="make"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Make</span>
+                    </label>
+                </div>
+                <div>
+                    <p-dropdown [options]="vinValid && makeList" formControlName="make" placeholder="Select"
+                        [virtualScroll]="false" [itemSize]="2" [filter]="true" optionLabel="makeName"
+                        optionValue="makeName" (onChange)="getMakeModelsList($event.value)"></p-dropdown>
+                </div>
+            </div>
+            <div class="col-4">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/model_i.svg" alt="model"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Model</span>
+                    </label>
+                </div>
+                <div>
+                    <p-dropdown [options]="Models" formControlName="model" optionLabel="modelName"
+                        optionValue="modelName" placeholder="Select" [virtualScroll]="false" [itemSize]="2"
+                        [filter]="true"></p-dropdown>
+                </div>
+            </div>
+            <div class="col-4">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/year_i.svg" alt="year"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Year</span>
+                    </label>
+                </div>
+                <div>
+                    <p-dropdown [options]="Years" formControlName="year" placeholder="Select" [virtualScroll]="false"
+                        [itemSize]="2" [filter]="true" optionValue="name" optionLabel="name" [virtualScroll]="true"
+                        [itemSize]="31"></p-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-12">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/service_to_perform_i.svg" alt="service"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Service to be Performed</span>
+                    </label>
+                </div>
+                <div>
+                    <p-multiSelect appendTo="body" [options]="serviceCategory" [filter]="true" showClear="false"
+                        formControlName="serviceCatg" defaultLabel="Select Service to be Performed"
+                        optionLabel="serviceName" optionValue="id" selectedItemsLabel="{0} service categories selected">
+                    </p-multiSelect>
+                </div>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col-12">
+                <div>
+                    <label>
+                        <img src="assets/images/dispatch/svg/service-form/add_notes_i.svg" alt="notes"
+                            onload="SVGInject(this)" class="icons-size mr-2 new-request-icon" />
+                        <span style="color: #9b9a9a;">Additional Notes</span>
+                    </label>
+                    <span style="float: right;" class="range-text">{{serviceForm?.value?.notes?.length ?
+                        serviceForm?.value?.notes?.length : 0}} /500</span>
+                </div>
+                <div>
+                    <textarea rows="2" cols="30" pInputTextarea autoResize="autoResize" maxlength="500"
+                        formControlName="serviceNotes" placeholder="Enter Additional notes" style="font-size: 14px;"
+                        class="input-bg"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+</p-dialog>
+<p-dialog [(visible)]="displayDetails" *ngIf="displayDetails" [modal]="true" [draggable]="false" [resizable]="true"
+    class="dispatch-modal request-details">
+    <ng-template pTemplate="header">
+        <div class="w-100 mx-3" style="display: flex;align-items: center;justify-content: space-between;">
+            <span style="font-size: 18px;font-weight: 500;">Service Request Details</span>
+        </div>
+    </ng-template>
+    <!-- <form> -->
+    <div class="row my-3" style="padding-top: 1rem !important;">
+        <div class="col-6">
+            <div>
+                <label>
+                    <img src="assets/images/dispatch/svg/service-form/shop_i.svg" alt="shop" onload="SVGInject(this)"
+                        class="icons-size mr-2 request-details-icon" />
+                    <span style="color: #9b9a9a;">Shop</span>
+                </label>
+            </div>
+            <div class="details-text">
+                <span>{{serviceData['shopData']?.name}}</span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div>
+                <label>
+                    <img src="assets/images/dispatch/svg/service-form/map.svg" alt="map" onload="SVGInject(this)"
+                        class="icons-size mr-2 request-details-icon" />
+                    <span style="color: #9b9a9a;">Address</span>
+                </label>
+            </div>
+            <div class="details-text">
+                <span class="truncate">{{serviceData['shopData']?.addressLine1 + ' ' +
+                    serviceData['shopData']?.addressLine2 + ' ' + '(' + serviceData['shopData']?.zip + ')' +
+                    serviceData['shopData']?.city + ' ' + serviceData['shopData']?.state}}</span>
+            </div>
+        </div>
+    </div>
+    <hr style="color : #e3e5e8">
+    <div class="row my-3">
+        <div class="col-6">
+            <div>
+                <label>
+                    <img src="assets/images/dispatch/svg/service-form/date_i.svg" alt="date" onload="SVGInject(this)"
+                        class="icons-size mr-2 request-details-icon" />
+                    <span style="color: #9b9a9a;">Date & Time</span>
+                </label>
+            </div>
+            <div class="details-text">
+                <span>{{serviceData.serviceTime}}</span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div>
+                <label>
+                    <img src="assets/images/dispatch/svg/service-form/repair_i.svg" alt="repair"
+                        onload="SVGInject(this)" class="icons-size mr-2 request-details-icon" />
+                    <span style="color: #9b9a9a;">Repair code #</span>
+                </label>
+            </div>
+            <div class="details-text">
+                <span class="truncate">{{serviceData.repairOrder}}</span>
+            </div>
+        </div>
+    </div>
+    <hr style="color : #e3e5e8">
+    <div class="row my-3">
+        <div class="col-6">
+            <div>
+                <label>
+                    <img src="assets/images/dispatch/svg/service-form/technician_i.svg" alt="technician"
+                        onload="SVGInject(this)" class="icons-size mr-2 request-details-icon" />
+                    <span style="color: #9b9a9a;">Technician</span>
+                </label>
+            </div>
+            <div class="details-text">
+                <span>{{serviceData['techInfo']?.techName}}</span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div>
+                <label>
+                    <img src="assets/images/dispatch/svg/service-form/status_i.svg" alt="status"
+                        onload="SVGInject(this)" class="icons-size mr-2 request-details-icon" />
+                    <span style="color: #9b9a9a;">Status</span>
+                </label>
+            </div>
+            <div class="details-text">
+                <span class="truncate">
+                    <p-tag styleClass="mr-2 status-pill" value="{{serviceData['statusData']?.name}}" [rounded]="true">
+                    </p-tag>
+                </span>
+            </div>
+        </div>
+    </div>
+    <hr style="color : #e3e5e8">
+    <div class="row my-3">
+        <div class="col-6">
+            <div>
+                <label>
+                    <img src="assets/images/dispatch/svg/service-form/vin_title_i.svg" alt="shop"
+                        onload="SVGInject(this)" class="icons-size mr-2 request-details-icon" />
+                    <span style="color: #9b9a9a;">VIN</span>
+                </label>
+            </div>
+            <div class="details-text">
+                <span>{{serviceData.vin}}</span>
+            </div>
+        </div>
+        <div class="col-6">
+            <div>
+                <label>
+                    <img src="assets/images/dispatch/svg/service-form/map.svg" alt="map" onload="SVGInject(this)"
+                        class="icons-size mr-2 request-details-icon" />
+                    <span style="color: #9b9a9a;">Vehicle</span>
+                </label>
+            </div>
+            <div class="details-text" *ngIf="serviceData.make">
+                <span class="truncate">{{serviceData.make}} > {{serviceData.model}} > {{serviceData.year}}</span>
+            </div>
+        </div>
+    </div>
+    <hr style="color : #e3e5e8">
+    <div class="row my-3">
+        <div class="col-12">
+            <div>
+                <label>
+                    <img src="assets/images/dispatch/svg/service-form/service_to_perform_i.svg" alt="shop"
+                        onload="SVGInject(this)" class="icons-size mr-2 request-details-icon" />
+                    <span style="color: #9b9a9a;">Service to be Performed</span>
+                </label>
+            </div>
+            <div class="details-text">
+                <ng-container *ngFor="let item of serviceData.serviceCatg">
+                    <p-tag id="pill_c" styleClass="mr-2 pill-color" value="{{item.name}}" [rounded]="true"></p-tag>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+    <hr style="color : #e3e5e8">
+    <div class="row my-3" style="padding-bottom: 1rem !important;">
+        <div class="col-12">
+            <div>
+                <label>
+                    <img src="assets/images/dispatch/svg/service-form/add_notes_i.svg" alt="shop"
+                        onload="SVGInject(this)" class="icons-size mr-2 request-details-icon" />
+                    <span style="color: #9b9a9a;">Additional Notes</span>
+                </label>
+            </div>
+            <div class="details-text">
+                <span>{{serviceData.notes}}</span>
+            </div>
+        </div>
+    </div>
+    <!-- </form> -->
+</p-dialog>
+<p-dialog header="Notes - {{(notesDate.date | date : 'EEE, MMMM dd')}} - {{notesDate.shopData.name}}" *ngIf="displayNote && notesDate.notesFlag" [(visible)]="displayNote" [modal]="true" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false" class="dispatch-modal card-spacing">
+    <p class="m-0" style="padding-top: 0.75rem;">{{notesDate.notes}}</p>
+</p-dialog>
+<div style="min-height: 80vh;">
+    <div class="loading-small-screen-scroll trst" style="left: 50%;" align="center" *ngIf="loadingDispatch"><img
+            src="assets/images/loading.svg" alt="Loader" /></div>
+</div>

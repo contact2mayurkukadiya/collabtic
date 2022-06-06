@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title></title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" id="appIcon" type="image/png" href="" />
+    <!--<link
+      rel="stylesheet"
+      href="https://assets.tokbox.com/solutions/css/style.css"
+    />-->
+
+  <!--  <link rel="stylesheet" href="assets/js/bootstrap.min.css" />
+    <script src="assets/js/checkbrowser.js"></script>-->
+
+   <!-- <script src="https://static.opentok.com/v2/js/opentok.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>-->
+
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/livestamp/1.1.2/livestamp.min.js"></script>-->
+
+    <!--<script src="assets/js/components/opentok-solutions-logging.js"></script>
+    <script src="assets/js/components/opentok-text-chat.js"></script>
+    <script src="assets/js/components/opentok-screen-sharing.js"></script>
+    <script src="assets/js/components/opentok-annotation.js"></script>
+    <script src="assets/js/components/opentok-archiving.js"></script>
+    <script src="assets/js/components/opentok-acc-core.js"></script>-->
+    <script>
+      if(window.location.host=='knowledge.collabtic.com')
+        {
+          var shareURL=window.location.href;
+          var shreplace=shareURL.replace('https://knowledge.collabtic.com','https://knowledge.boydgroup.com');
+          window.location.href=shreplace;
+          //window.open('https://knowledge.boydgroup.com', '_self');
+        }
+      if(window.location.href=='https://knowledge.boydgroup.com' || window.location.href=='https://knowledge.boydgroup.com/')
+        {
+          window.open('sso/index.php?sso', '_self');
+        }
+      </script>
+    <!-- <script defer src="assets/js/components/app.js"></script> -->
+    <link rel="manifest" href="/manifest.json" />
+  </head>
+  <body>
+    <!--<app-root><div class="index-loader text-center"><img src="assets/images/loading.svg" alt="Loader" width="100" height="100" /></div></app-root>-->
+    <app-root></app-root>
+    <app-redirect></app-redirect>
+  </body>
+</html>
